@@ -3,17 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
     "@types/jest": "24.0.9",
     "@types/node": "11.10.4",
     "@types/react": "16.8.6",
     "@types/react-dom": "16.8.2",
+    "material-ui": "^0.20.2",
+    "nanoevents": "^1.0.8",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
+    "react-piano": "^3.1.2",
+    "react-rnd": "^9.1.2",
     "react-scripts": "2.1.5",
-    "typescript": "3.3.3333"
+    "styled-components": "^4.1.3",
+    "tunajs": "^1.0.9",
+    "typescript": "^3.3.3333",
+    "webaudio-peaks": "0.0.6",
+    "worker-loader": "^2.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-app-rewired start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -26,5 +35,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "1.16.4",
+    "react-app-rewired": "^2.1.0"
+  }
 }
