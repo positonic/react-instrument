@@ -2,6 +2,7 @@ interface InstrumentConfig {
   provider: any;
   parameters?: any;
   audioContext: AudioContext;
+  effects?: any;
   mainOutput: GainNode;
   timeSequencer: any;
   instrument: any;
@@ -22,6 +23,7 @@ interface InstrumentConfig {
   setArmedInstrument: (instrumentId: number) => void;
   setInstrumentGain: (instrumentId: number, value: number) => void;
   changeSequencedKeyboardView: (instrumentId: number, view: string) => void;
+  toggleFilter: (instrumentId: number, filterIndex: number) => void;
 }
 
 export default InstrumentConfig;

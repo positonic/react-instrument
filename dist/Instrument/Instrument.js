@@ -87,7 +87,7 @@ function _templateObject3() {
 }
 
 function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\n  width:100%;\n"]);
+  var data = _taggedTemplateLiteral(["\n  width:100%;\n  color: white;\n  font-size: 1.5em;\n  margin: 10px auto 0;\n  position: relative;\n  h3 {\n    color: white;\n    font-size: 28px;\n}\n"]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -204,12 +204,14 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
       _this.deleteInstrument = _this.deleteInstrument.bind(_assertThisInitialized(_this));
       _this.changeInstrument = _this.changeInstrument.bind(_assertThisInitialized(_this));
       _this.toggleMoreSettings = _this.toggleMoreSettings.bind(_assertThisInitialized(_this));
+      _this.toggleEffects = _this.toggleEffects.bind(_assertThisInitialized(_this));
       _this.updateSynthFilterState = _this.updateSynthFilterState.bind(_assertThisInitialized(_this));
       _this.updateSynthOscState = _this.updateSynthOscState.bind(_assertThisInitialized(_this));
       _this.updateEnvelopeState = _this.updateEnvelopeState.bind(_assertThisInitialized(_this));
       _this.onTick = _this.onTick.bind(_assertThisInitialized(_this));
       _this.setSelectedNotes = _this.setSelectedNotes.bind(_assertThisInitialized(_this));
       _this.changeGridSequence = _this.changeGridSequence.bind(_assertThisInitialized(_this));
+      _this.toggleFilter = _this.toggleFilter.bind(_assertThisInitialized(_this));
       _this.state = {
         showAnalyser: false,
         instrument: props.instrument
@@ -407,6 +409,31 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
         });
       }
     }, {
+      key: "getToggleParametersButton",
+      value: function getToggleParametersButton(showMoreSettings) {
+        if (Parameters && showMoreSettings) {
+          return _react.default.createElement("li", null, _react.default.createElement(_ToggleMoreSettings.default, {
+            onClick: this.toggleMoreSettings
+          }, _react.default.createElement("i", {
+            className: "fa fa-bars"
+          })));
+        } else return null;
+      }
+    }, {
+      key: "toggleEffects",
+      value: function toggleEffects() {
+        //this.props.toggleShowEffects(this.props.trackId, this.props.instrumentId);
+        var showEffects = this.state.instrument.showEffects;
+        var state = this.state;
+        this.setState(function (state) {
+          return _objectSpread({}, state, {
+            instrument: _objectSpread({}, state.instrument, {
+              showEffects: !showEffects
+            })
+          });
+        });
+      }
+    }, {
       key: "setSelectedNotes",
       value: function setSelectedNotes(selectedNotes) {
         this.setState(function (state) {
@@ -440,6 +467,11 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
       value: function changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber) {
         var instrument = this.state.instrument;
         this.props.changeGridSequence(midiNumber, instrumentId, instrument, noteLengthBeats, beatNumber);
+      }
+    }, {
+      key: "toggleFilter",
+      value: function toggleFilter(instrumentId, filterIndex) {
+        this.props.toggleFilter(instrumentId, filterIndex);
       }
     }, {
       key: "render",
@@ -527,9 +559,12 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
               oscillators: instrument.oscillators
             });else instrumentParameters = '';
             var instrumentEffects;
-            if (Effects && instrument.showEffects === true) instrumentEffects = _react.default.createElement(Effects, _extends({
-              instrument: instrument
-            }, _this5.props));else instrumentEffects = '';
+            console.log('Effects is ', Effects, instrument.showEffects);
+            if (Effects && instrument.showEffects === true) instrumentEffects = _react.default.createElement(Effects, {
+              instrument: instrument,
+              instrumentId: instrumentId,
+              toggleFilter: _this5.toggleFilter
+            });else instrumentEffects = '';
             var activateStyle = isArmed ? {
               color: 'yellow'
             } : {
@@ -587,12 +622,8 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
                       return changeView('keyboard');
                     },
                     className: "metal linear"
-                  }, "keyboard")), _react.default.createElement("li", null, _react.default.createElement(_ToggleMoreSettings.default, {
-                    onClick: _this5.toggleMoreSettings
-                  }, _react.default.createElement("i", {
-                    className: "fa fa-bars"
-                  }))), _react.default.createElement("li", null, _react.default.createElement(_ToggleMoreSettings.default, {
-                    onClick: toggleEffects
+                  }, "keyboard")), _this5.getToggleParametersButton(instrument.showMoreSettings), _react.default.createElement("li", null, _react.default.createElement(_ToggleMoreSettings.default, {
+                    onClick: _this5.toggleEffects
                   }, _react.default.createElement("i", {
                     className: "fa fa-assistive-listening-systems"
                   })))), instrumentParameters, " ", _react.default.createElement("br", {

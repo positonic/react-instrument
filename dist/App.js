@@ -21,9 +21,13 @@ var _Instrument = _interopRequireDefault(require("./Instrument"));
 
 var TimeSequencer = _interopRequireWildcard(require("./Instrument/TimeSequencer"));
 
-var _SampleProvider = _interopRequireDefault(require("./SampleProvider"));
+var _Provider = _interopRequireDefault(require("./Synth/Provider"));
 
-var _sampler = _interopRequireDefault(require("./data/sampler"));
+var _Parameters = _interopRequireDefault(require("./Synth/Parameters"));
+
+var _synthesizer = _interopRequireDefault(require("./data/synthesizer"));
+
+var _Effects = _interopRequireDefault(require("./Effects"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -52,7 +56,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  float:right;\n  cursor: pointer;\n  i {\n    font-size: 40px;\n  }\n  i:hover {\n    color: #01A9E8;\n    }\n"]);
+  var data = _taggedTemplateLiteral(["\n  cursor: pointer;\n  i {\n    font-size: 40px;\n  }\n  i:hover {\n    color: #01A9E8;\n    }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -63,15 +67,10 @@ function _templateObject() {
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-var Parameters = null;
-
-/*import Provider from './Synth/Provider';
-import Parameters from "./Synth/Parameters";
-import instrument from "./data/synthesizer";*/
 window['fluent'] = window['fluent'] || {};
 window['fluent'].emitter = new _nanoevents.default();
 
-var PlayButtonHolder = _styledComponents.default.a(_templateObject());
+var PlayButtonHolder = _styledComponents.default.div(_templateObject());
 
 var audioContext = new AudioContext();
 var instrumentNames = ["claustra", "vinyl", "moog1", "moog2", "acid", "distBass1c", "distBass3c", "distBass5e", "distBass8g", "distBass7g", "distBass8e", "wobbleBass1g", "synthMc9Dist2c", "synthMc9Dist3c"];
@@ -121,14 +120,14 @@ function (_React$Component) {
 
     _this.state = {
       samplesBuffers: [],
-      instrument: _sampler.default,
+      instrument: _synthesizer.default,
       isPlaying: false
     };
     _this.playButtonClick = _this.playButtonClick.bind(_assertThisInitialized(_this));
     _this.changeSequencedKeyboardView = _this.changeSequencedKeyboardView.bind(_assertThisInitialized(_this));
     _this.toggleShowEffects = _this.toggleShowEffects.bind(_assertThisInitialized(_this));
     _this.changeBeatsPerLoop = _this.changeBeatsPerLoop.bind(_assertThisInitialized(_this));
-    _this.gainNode = Gain.create(audioContext, audioContext.destination, _sampler.default.gain);
+    _this.gainNode = Gain.create(audioContext, audioContext.destination, _synthesizer.default.gain);
     return _this;
   }
 
@@ -163,6 +162,18 @@ function (_React$Component) {
           })
         });
       });
+    }
+  }, {
+    key: "toggleFilter",
+    value: function toggleFilter(instrumentId, filterIndex) {
+      console.log('Toggle filter');
+      /*this.setState(state => ({
+        ...state,
+        instrument: {
+          ...state.instrument,
+          filters: (state.instrument.view === 'grid' ? 'keyboard' : 'grid')
+        }
+      }));*/
     }
   }, {
     key: "changeGridSequence",
@@ -220,15 +231,16 @@ function (_React$Component) {
     value: function renderInstrument(loadingSamples, samplesBuffers) {
       if (!loadingSamples && samplesBuffers.length > 0) {
         var instrumentConfig = {
-          provider: _SampleProvider.default,
-          parameters: Parameters,
+          provider: _Provider.default,
+          parameters: _Parameters.default,
           instrument: this.state.instrument,
+          effects: _Effects.default,
           audioContext: audioContext,
           mainOutput: this.gainNode,
           timeSequencer: TimeSequencer,
           instrumentId: instrumentIndex,
           instrumentNames: instrumentNames,
-          currentInstrument: _sampler.default.currentInstrument,
+          currentInstrument: _synthesizer.default.currentInstrument,
           samplesBuffers: samplesBuffers,
           gainNode: this.gainNode,
           gain: 0.2,
@@ -241,11 +253,14 @@ function (_React$Component) {
           deleteInstrument: this.deleteInstrument,
           setArmedInstrument: this.setArmedInstrument,
           setInstrumentGain: this.setInstrumentGain,
-          changeSequencedKeyboardView: this.changeSequencedKeyboardView
+          changeSequencedKeyboardView: this.changeSequencedKeyboardView,
+          toggleFilter: this.toggleFilter
         };
         return _react.default.createElement("div", {
           className: "instrument",
           style: {
+            width: "100%",
+            padding: "20px",
             display: "inline-block",
             marginRight: "20px",
             verticalAlign: "top",

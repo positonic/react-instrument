@@ -27,6 +27,14 @@ const SequencedKeyboardContainer = styled.div`
 
 const Instrument = styled.div`
   width:100%;
+  color: white;
+  font-size: 1.5em;
+  margin: 10px auto 0;
+  position: relative;
+  h3 {
+    color: white;
+    font-size: 28px;
+}
 `;
 
 const SequencedKeyboardBody = styled.div`
@@ -127,12 +135,14 @@ export function withSequencedKeyboard(
       this.deleteInstrument = this.deleteInstrument.bind(this);
       this.changeInstrument = this.changeInstrument.bind(this);
       this.toggleMoreSettings = this.toggleMoreSettings.bind(this);
+      this.toggleEffects = this.toggleEffects.bind(this);
       this.updateSynthFilterState = this.updateSynthFilterState.bind(this);
       this.updateSynthOscState = this.updateSynthOscState.bind(this);
       this.updateEnvelopeState = this.updateEnvelopeState.bind(this);
       this.onTick = this.onTick.bind(this);
       this.setSelectedNotes = this.setSelectedNotes.bind(this);
       this.changeGridSequence = this.changeGridSequence.bind(this);
+      this.toggleFilter = this.toggleFilter.bind(this);
 
       this.state = {
         showAnalyser: false,
@@ -342,6 +352,31 @@ export function withSequencedKeyboard(
         }
       }));
     }
+    getToggleParametersButton(showMoreSettings) {
+      if (Parameters && showMoreSettings) {
+        return (<li>
+          <ToggleMoreSettings onClick={this.toggleMoreSettings}>
+            <i className="fa fa-bars" />
+          </ToggleMoreSettings>
+        </li>);
+      } else return null;
+    }
+    toggleEffects() {
+      //this.props.toggleShowEffects(this.props.trackId, this.props.instrumentId);
+      const { showEffects } = this.state.instrument;
+      const state = this.state;
+
+      this.setState(state => ({
+        ...state,
+        instrument: {
+          ...state.instrument,
+          showEffects: !showEffects
+        }
+      }));
+    }
+
+
+
     setSelectedNotes(selectedNotes) {
 
       this.setState(state => ({
@@ -376,6 +411,11 @@ export function withSequencedKeyboard(
       const { instrument } = this.state;
       this.props.changeGridSequence(midiNumber, instrumentId, instrument, noteLengthBeats, beatNumber)
     }
+
+    toggleFilter(instrumentId, filterIndex) {
+      this.props.toggleFilter(instrumentId, filterIndex);
+    }
+
 
     render() {
       const {
@@ -456,8 +496,10 @@ export function withSequencedKeyboard(
 
               let instrumentEffects;
 
+              console.log('Effects is ', Effects, instrument.showEffects);
+
               if (Effects && instrument.showEffects === true)
-                instrumentEffects = <Effects instrument={instrument} {...this.props} />;
+                instrumentEffects = <Effects instrument={instrument} instrumentId={instrumentId} toggleFilter={this.toggleFilter} />;
               else instrumentEffects = '';
               const activateStyle = isArmed
                 ? {
@@ -529,14 +571,9 @@ export function withSequencedKeyboard(
                                         keyboard
                                       </button>
                                     </li>
-                                    {/* {this.getToggleMoreSettingsButton()}*/}
+                                    {this.getToggleParametersButton(instrument.showMoreSettings)}
                                     <li>
-                                      <ToggleMoreSettings onClick={this.toggleMoreSettings}>
-                                        <i className="fa fa-bars" />
-                                      </ToggleMoreSettings>
-                                    </li>
-                                    <li>
-                                      <ToggleMoreSettings onClick={toggleEffects}>
+                                      <ToggleMoreSettings onClick={this.toggleEffects}>
                                         <i className="fa fa-assistive-listening-systems" />
                                       </ToggleMoreSettings>
                                     </li>

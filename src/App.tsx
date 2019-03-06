@@ -8,20 +8,20 @@ import Instrument from './Instrument';
 import InstrumentConfig from './Instrument/types/InstrumentConfig';
 import * as TimeSequencer from './Instrument/TimeSequencer';
 
-import Provider from './SampleProvider';
+/*import Provider from './SampleProvider';
 const Parameters = null;
-import instrument from "./data/sampler";
+import instrument from "./data/sampler";*/
 
-/*import Provider from './Synth/Provider';
+import Provider from './Synth/Provider';
 import Parameters from "./Synth/Parameters";
-import instrument from "./data/synthesizer";*/
+import instrument from "./data/synthesizer";
+import Effects from "./Effects";
 
 
 window['fluent'] = window['fluent'] || {};
 window['fluent'].emitter = new NanoEvents();
 
-const PlayButtonHolder = styled.a`
-  float:right;
+const PlayButtonHolder = styled.div`
   cursor: pointer;
   i {
     font-size: 40px;
@@ -136,6 +136,18 @@ class App extends React.Component<any, any> {
     }));
   }
 
+  toggleFilter(instrumentId: number, filterIndex: number) {
+
+    console.log('Toggle filter');
+    /*this.setState(state => ({
+      ...state,
+      instrument: {
+        ...state.instrument,
+        filters: (state.instrument.view === 'grid' ? 'keyboard' : 'grid')
+      }
+    }));*/
+  }
+
   changeGridSequence(midiNumber: number, instrumentId: number, instrument: any, noteLengthBeats: number, beatNumber: number) :void {
     debugger
   }
@@ -191,7 +203,7 @@ class App extends React.Component<any, any> {
         provider: Provider,
         parameters: Parameters,
         instrument: this.state.instrument,
-
+        effects: Effects,
         audioContext: audioContext,
         mainOutput: this.gainNode,
         timeSequencer: TimeSequencer,
@@ -212,12 +224,15 @@ class App extends React.Component<any, any> {
         setArmedInstrument: this.setArmedInstrument,
         setInstrumentGain: this.setInstrumentGain,
         changeSequencedKeyboardView: this.changeSequencedKeyboardView,
+        toggleFilter: this.toggleFilter,
       }
 
       return (
         <div
           className="instrument"
           style={{
+            width: "100%",
+            padding: "20px",
             display: "inline-block",
             marginRight: "20px",
             verticalAlign: "top",
