@@ -325,12 +325,11 @@ function (_React$Component) {
   }, {
     key: "changeGridSequence",
     value: function changeGridSequence(midiNumber, noteLengthBeats, beatNumber) {
+      debugger;
       var _this$props2 = this.props,
           changeGridSequence = _this$props2.changeGridSequence,
-          trackId = _this$props2.trackId,
-          instrumentId = _this$props2.instrumentId,
-          instrument = _this$props2.instrument;
-      changeGridSequence(midiNumber, trackId, instrumentId, instrument, noteLengthBeats, beatNumber);
+          instrumentId = _this$props2.instrumentId;
+      changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber);
     }
   }, {
     key: "render",

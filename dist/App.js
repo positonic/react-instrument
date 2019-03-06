@@ -121,6 +121,7 @@ function (_React$Component) {
     };
     _this.playButtonClick = _this.playButtonClick.bind(_assertThisInitialized(_this));
     _this.changeSequencedKeyboardView = _this.changeSequencedKeyboardView.bind(_assertThisInitialized(_this));
+    _this.gainNode = Gain.create(audioContext, audioContext.destination, _sampler.default.gain);
     return _this;
   }
 
@@ -129,7 +130,6 @@ function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      this.gainNode = Gain.create(audioContext, audioContext.destination, _sampler.default.gain);
       TimeSequencer.init(audioContext, this.gainNode);
       _asyncRequest = sampleLoader.init(audioContext, sampleFilePaths).then(function (loadedSamplesBuffers) {
         _asyncRequest = null;
@@ -148,7 +148,7 @@ function (_React$Component) {
     }
   }, {
     key: "changeSequencedKeyboardView",
-    value: function changeSequencedKeyboardView() {
+    value: function changeSequencedKeyboardView(instrumentId, view) {
       this.setState(function (state) {
         return _objectSpread({}, state, {
           instrument: _objectSpread({}, state.instrument, {
@@ -156,6 +156,31 @@ function (_React$Component) {
           })
         });
       });
+    }
+  }, {
+    key: "changeGridSequence",
+    value: function changeGridSequence(midiNumber, instrumentId, instrument, noteLengthBeats, beatNumber) {
+      debugger;
+    }
+  }, {
+    key: "changeSequencedKeyboardInstrument",
+    value: function changeSequencedKeyboardInstrument(instrumentId, value) {
+      debugger;
+    }
+  }, {
+    key: "deleteInstrument",
+    value: function deleteInstrument(instrumentId) {
+      debugger;
+    }
+  }, {
+    key: "setArmedInstrument",
+    value: function setArmedInstrument(instrumentId) {
+      debugger;
+    }
+  }, {
+    key: "setInstrumentGain",
+    value: function setInstrumentGain(instrumentId, value) {
+      debugger;
     }
   }, {
     key: "renderSimpler",
@@ -172,16 +197,23 @@ function (_React$Component) {
           currentInstrument: _sampler.default.currentInstrument,
           samplesBuffers: samplesBuffers,
           gainNode: this.gainNode,
-          changeSequencedKeyboardView: this.changeSequencedKeyboardView,
+          gain: 0.2,
           isArmed: true,
-          showInstrument: true
+          showInstrument: true,
+          changeGridSequence: this.changeGridSequence,
+          changeSequencedKeyboardInstrument: this.changeSequencedKeyboardInstrument,
+          deleteInstrument: this.deleteInstrument,
+          setArmedInstrument: this.setArmedInstrument,
+          setInstrumentGain: this.setInstrumentGain,
+          changeSequencedKeyboardView: this.changeSequencedKeyboardView
         };
         return _react.default.createElement("div", {
           className: "instrument",
           style: {
             display: "inline-block",
             marginRight: "20px",
-            verticalAlign: "top"
+            verticalAlign: "top",
+            backgroundColor: '#222'
           }
         }, _react.default.createElement(_Instrument.default, {
           config: instrumentConfig

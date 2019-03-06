@@ -181,14 +181,11 @@ function withParameters(SequencedKeyboard, Parameters, props) {
 
 var playingVoices = {};
 
-function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Effects, props) {
+function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Effects) {
   var _class, _temp;
 
-  var trackId = props.trackId,
-      instrumentId = props.instrumentId;
+  //const { trackId, instrumentId } = props;
   var midi = null;
-  var noteGridSettings = getDefaultGridConfig();
-  noteGridSettings.beats = props.instrument.beatsPerLoop;
   return _temp = _class =
   /*#__PURE__*/
   function (_React$Component2) {
@@ -200,6 +197,9 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
       _classCallCheck(this, _class);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, props));
+
+      _defineProperty(_assertThisInitialized(_this), "noteGridSettings", void 0);
+
       _this.setVoices = _this.setVoices.bind(_assertThisInitialized(_this));
       _this.deleteInstrument = _this.deleteInstrument.bind(_assertThisInitialized(_this));
       _this.changeInstrument = _this.changeInstrument.bind(_assertThisInitialized(_this));
@@ -209,6 +209,7 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
       _this.updateEnvelopeState = _this.updateEnvelopeState.bind(_assertThisInitialized(_this));
       _this.onTick = _this.onTick.bind(_assertThisInitialized(_this));
       _this.setSelectedNotes = _this.setSelectedNotes.bind(_assertThisInitialized(_this));
+      _this.changeGridSequence = _this.changeGridSequence.bind(_assertThisInitialized(_this));
       _this.state = {
         showAnalyser: false,
         instrument: props.instrument
@@ -216,6 +217,8 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
 
       _this.props.timeSequencer.subscribeToTicks(props.instrumentId, _this.onTick);
 
+      _this.noteGridSettings = getDefaultGridConfig();
+      _this.noteGridSettings.beats = props.instrument.beatsPerLoop;
       return _this;
     }
 
@@ -236,12 +239,12 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
     }, {
       key: "changeInstrument",
       value: function changeInstrument(evt) {
-        this.props.changeSequencedKeyboardInstrument(trackId, instrumentId, evt.target.value);
+        this.props.changeSequencedKeyboardInstrument(this.props.instrumentId, evt.target.value);
       }
     }, {
       key: "deleteInstrument",
       value: function deleteInstrument() {
-        this.props.deleteInstrument(trackId, instrumentId);
+        this.props.deleteInstrument(this.props.instrumentId);
       }
     }, {
       key: "getInstrumentSelector",
@@ -263,13 +266,12 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
     }, {
       key: "activateInstrument",
       value: function activateInstrument() {
-        props.setArmedInstrument(instrumentId);
+        this.props.setArmedInstrument(this.props.instrumentId);
       }
-    }, {
-      key: "setInstrumentGain",
-      value: function setInstrumentGain(value) {
-        props.setInstrumentGain(trackId, instrumentId, value);
-      }
+      /*setInstrumentGain(value) {
+        this.props.setInstrumentGain(this.props.instrumentId, value);
+      }*/
+
     }, {
       key: "updateSynthOscState",
       value: function updateSynthOscState(oscId, property, value) {
@@ -434,6 +436,12 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
         }));*/
       }
     }, {
+      key: "changeGridSequence",
+      value: function changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber) {
+        var instrument = this.state.instrument;
+        this.props.changeGridSequence(midiNumber, instrumentId, instrument, noteLengthBeats, beatNumber);
+      }
+    }, {
       key: "render",
       value: function render() {
         var _this5 = this;
@@ -481,7 +489,7 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
           /*mainOutput={outputJack}*/
           ,
           bpm: bpm,
-          gain: props.gain,
+          gain: this.props.gain,
           instrumentId: instrumentId,
           synthConfig: {
             oscillators: instrument.oscillators,
@@ -492,7 +500,7 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
           setVoices: this.setVoices,
           playingVoices: playingVoices,
           samplesBuffers: samplesBuffers,
-          gainNode: props.gainNode,
+          gainNode: this.props.gainNode,
           render: function render(_ref) {
             var isLoading = _ref.isLoading,
                 playNote = _ref.playNote,
@@ -546,18 +554,19 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
                 if (showAnalyser) return Visualiser(samplesBuffers.filter(function (o) {
                   return o.name === currentInstrument;
                 })[0].buffer);
-              }(_this5.state.showAnalyser, currentInstrument, samplesBuffers), _this5.getInstrumentSelector(instrumentNames, currentInstrument), _react.default.createElement(SequencedKeyboard, _extends({
+              }(_this5.state.showAnalyser, currentInstrument, samplesBuffers), _this5.getInstrumentSelector(instrumentNames, currentInstrument), _react.default.createElement(SequencedKeyboard, {
                 setSelectedNotesState: _this5.setSelectedNotes,
                 playNote: playNote,
                 stopNote: stopNote,
                 pianoSettings: pianoSettings,
-                noteGridSettings: noteGridSettings,
+                noteGridSettings: _this5.noteGridSettings,
                 activeView: instrument.view,
                 instrument: instrument,
                 isArmed: isArmed,
                 deleteSelectedNotesState: _this5.deleteSelectedNotes,
-                changeSequencedKeyboardView: changeSequencedKeyboardView
-              }, props, {
+                changeSequencedKeyboardView: changeSequencedKeyboardView,
+                instrumentId: instrumentId,
+                changeGridSequence: _this5.changeGridSequence,
                 render: function render(_ref2) {
                   var changeView = _ref2.changeView,
                       _changeNumberOfBeatsLoop = _ref2.changeNumberOfBeatsLoop,
@@ -593,7 +602,7 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
                     }
                   }), getView()), getNoteGrid());
                 }
-              }))));
+              })));
             } else {
               return null;
             }

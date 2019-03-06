@@ -148,7 +148,8 @@ function (_React$Component) {
           setSelectedNotesState = _this$props2.setSelectedNotesState,
           instrumentId = _this$props2.instrumentId,
           instrument = _this$props2.instrument,
-          activeView = _this$props2.activeView;
+          activeView = _this$props2.activeView,
+          changeGridSequence = _this$props2.changeGridSequence;
       if (activeView !== 'grid') return null;else {
         var gridWidthPixels = noteGridSettings.gridWidthPixels,
             ticksPerBeat = noteGridSettings.ticksPerBeat,
@@ -170,7 +171,8 @@ function (_React$Component) {
           instrumentNotes: instrument.notes[instrument.notesIndex],
           beatsPerLoop: this.props.noteGridSettings.beats,
           deleteSelectedNotes: this.deleteSelectedNotes,
-          audioContext: this.props.audioContext
+          audioContext: this.props.audioContext,
+          changeGridSequence: changeGridSequence
         }));
       }
     }
@@ -179,9 +181,8 @@ function (_React$Component) {
     value: function changeView(view) {
       var _this$props3 = this.props,
           changeSequencedKeyboardView = _this$props3.changeSequencedKeyboardView,
-          trackId = _this$props3.trackId,
           instrumentId = _this$props3.instrumentId;
-      changeSequencedKeyboardView(trackId, instrumentId, view);
+      changeSequencedKeyboardView(instrumentId, view);
     }
   }, {
     key: "changeNumberOfBeatsLoop",

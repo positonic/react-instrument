@@ -20,20 +20,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _default(props) {
   var config = props.config;
   var Parameters = null;
-  var InstrumentWithSequencedKeyboard = Instrument.withSequencedKeyboard(_SequencedKeyboard.default, config.provider, Parameters, _Effects.default, config);
-  return _react.default.createElement(InstrumentWithSequencedKeyboard, {
-    audioContext: config.audioContext,
-    instrumentNames: config.instrumentNames,
-    currentInstrument: config.currentInstrument,
-    mainOutput: config.mainOutput,
-    onToggle: config.onToggle,
-    instrument: config.instrument,
-    timeSequencer: config.timeSequencer,
-    isArmed: config.isArmed,
-    showInstrument: config.showInstrument,
-    samplesBuffers: config.samplesBuffers,
-    instrumentGainNode: config.instrumentGainNode,
-    changeSequencedKeyboardInstrument: config.changeSequencedKeyboardInstrument,
-    instrumentId: config.instrumentId
-  });
+  var InstrumentWithSequencedKeyboard = Instrument.withSequencedKeyboard(_SequencedKeyboard.default, config.provider, Parameters, _Effects.default);
+  /* audioContext={config.audioContext}
+      instrumentNames={config.instrumentNames}
+      currentInstrument={config.currentInstrument}
+      mainOutput={config.mainOutput}
+      onToggle={config.onToggle}
+      instrument={config.instrument}
+      timeSequencer={config.timeSequencer}
+      isArmed={config.isArmed}
+      showInstrument={config.showInstrument}
+      samplesBuffers={config.samplesBuffers}
+      instrumentGainNode={config.instrumentGainNode}
+      instrumentId={config.instrumentId}
+      gainNode={config.gainNode}
+       changeGridSequence={config.changeGridSequence}
+      changeSequencedKeyboardInstrument={config.changeSequencedKeyboardInstrument}
+      changeSequencedKeyboardView={config.changeSequencedKeyboardView}
+  */
+
+  return _react.default.createElement(InstrumentWithSequencedKeyboard, config);
 }
