@@ -9,21 +9,23 @@ var _react = _interopRequireDefault(require("react"));
 
 require("./App.css");
 
-var _index = _interopRequireDefault(require("./instruments/Simpler/index"));
-
 var _sampler = _interopRequireDefault(require("./data/sampler"));
 
 var sampleLoader = _interopRequireWildcard(require("./SampleLoader"));
 
-var Gain = _interopRequireWildcard(require("./instruments/audio/Gain"));
+var Gain = _interopRequireWildcard(require("./Instrument/audio/Gain"));
 
 var _nanoevents = _interopRequireDefault(require("nanoevents"));
 
 var _fluentReactPlayButton = _interopRequireDefault(require("fluent-react-play-button"));
 
-var TimeSequencer = _interopRequireWildcard(require("./instruments/TimeSequencer"));
+var TimeSequencer = _interopRequireWildcard(require("./Instrument/TimeSequencer"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _Provider = _interopRequireDefault(require("./Provider"));
+
+var _Instrument = _interopRequireDefault(require("./Instrument"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -161,14 +163,8 @@ function (_React$Component) {
     key: "renderSimpler",
     value: function renderSimpler(loadingSamples, samplesBuffers) {
       if (!loadingSamples && samplesBuffers.length > 0) {
-        return _react.default.createElement("div", {
-          className: "instrument",
-          style: {
-            display: "inline-block",
-            marginRight: "20px",
-            verticalAlign: "top"
-          }
-        }, _react.default.createElement(_index.default, {
+        var instrumentConfig = {
+          provider: _Provider.default,
           audioContext: audioContext,
           mainOutput: this.gainNode,
           timeSequencer: TimeSequencer,
@@ -178,7 +174,19 @@ function (_React$Component) {
           currentInstrument: _sampler.default.currentInstrument,
           samplesBuffers: samplesBuffers,
           gainNode: this.gainNode,
-          changeSequencedKeyboardView: this.changeSequencedKeyboardView
+          changeSequencedKeyboardView: this.changeSequencedKeyboardView,
+          isArmed: true,
+          showInstrument: true
+        };
+        return _react.default.createElement("div", {
+          className: "instrument",
+          style: {
+            display: "inline-block",
+            marginRight: "20px",
+            verticalAlign: "top"
+          }
+        }, _react.default.createElement(_Instrument.default, {
+          config: instrumentConfig
         }));
       } else return null;
     }

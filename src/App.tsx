@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import "./App.css";
-import Simpler from "./instruments/Simpler/index";
+import Simpler from "./Instrument/Simpler/index";
 import instrument from "./data/sampler";
 import * as sampleLoader from './SampleLoader';
-import * as Gain from './instruments/audio/Gain';
+import * as Gain from './Instrument/audio/Gain';
 import NanoEvents from "nanoevents";
 import PlayButton from 'fluent-react-play-button';
-import * as TimeSequencer from './instruments/TimeSequencer';
+import * as TimeSequencer from './Instrument/TimeSequencer';
 import styled from "styled-components";
+
+import Provider from './Provider';
+import Instrument from './Instrument';
+import InstrumentConfig from './Instrument/types/InstrumentConfig';
 
 window['fluent'] = window['fluent'] || {};
 window['fluent'].emitter = new NanoEvents();
@@ -73,6 +77,8 @@ let sampleFilePaths = {
 const instrumentIndex = 0;
 
 
+
+
 var _asyncRequest;
 
 class App extends React.Component<any, any> {
@@ -126,6 +132,21 @@ class App extends React.Component<any, any> {
   renderSimpler(loadingSamples, samplesBuffers) {
 
     if(!loadingSamples && samplesBuffers.length > 0) {
+      const instrumentConfig: InstrumentConfig = {
+        provider: Provider,
+        audioContext: audioContext,
+        mainOutput: this.gainNode,
+        timeSequencer: TimeSequencer,
+        instrument: this.state.instrument,
+        instrumentId: instrumentIndex,
+        instrumentNames: instrumentNames,
+        currentInstrument: instrument.currentInstrument,
+        samplesBuffers: samplesBuffers,
+        gainNode: this.gainNode,
+        changeSequencedKeyboardView: this.changeSequencedKeyboardView,
+        isArmed: true,
+        showInstrument: true
+      }
 
       return (
         <div
@@ -136,17 +157,8 @@ class App extends React.Component<any, any> {
             verticalAlign: "top"
           }}
         >
-          <Simpler
-            audioContext={audioContext}
-            mainOutput={this.gainNode}
-            timeSequencer={TimeSequencer}
-            instrument={this.state.instrument}
-            instrumentId={instrumentIndex}
-            instrumentNames={instrumentNames}
-            currentInstrument={instrument.currentInstrument}
-            samplesBuffers={samplesBuffers}
-            gainNode={this.gainNode}
-            changeSequencedKeyboardView={this.changeSequencedKeyboardView}
+          <Instrument
+            config={instrumentConfig}
           />
         </div>
       );

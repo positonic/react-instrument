@@ -23,5 +23,7 @@
   "include": [
     "src"
   ],
-  "exclude": ["src/instruments/TimeSequencer/workers/HeartBeat.worker.js"]
+  "exclude": [
+    "src/Instrument/TimeSequencer/workers/HeartBeat.worker.js"
+  ]
 }
