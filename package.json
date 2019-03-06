@@ -1,8 +1,8 @@
 {
   "name": "react-instrument",
   "description": "Looks after UI and and sequencing of your instrument, and lets you have fun building the sound engine",
-  "main": "dist/index.js",
-  "version": "0.0.4",
+  "main": "dist/Instrument/index.js",
+  "version": "0.0.5",
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@types/jest": "24.0.9",
