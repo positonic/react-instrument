@@ -93,11 +93,12 @@ class App extends React.Component<any, any> {
     }
     this.playButtonClick = this.playButtonClick.bind(this);
     this.changeSequencedKeyboardView = this.changeSequencedKeyboardView.bind(this);
+
+    this.gainNode = Gain.create(audioContext, audioContext.destination, instrument.gain);
+
   }
 
   componentDidMount() {
-    this.gainNode = Gain.create(audioContext, audioContext.destination, instrument.gain);
-
     TimeSequencer.init(audioContext, this.gainNode);
 
     _asyncRequest = sampleLoader
@@ -118,7 +119,7 @@ class App extends React.Component<any, any> {
       _asyncRequest.cancel();
     }
   }
-  changeSequencedKeyboardView() {
+  changeSequencedKeyboardView(instrumentId: number, view: string) {
     this.setState(state => ({
       ...state,
       instrument: {
@@ -126,6 +127,28 @@ class App extends React.Component<any, any> {
         view: (state.instrument.view === 'grid' ? 'keyboard' : 'grid')
       }
     }));
+  }
+
+  changeGridSequence(midiNumber: number, instrumentId: number, instrument: any, noteLengthBeats: number, beatNumber: number) :void {
+    debugger
+  }
+
+
+  changeSequencedKeyboardInstrument(instrumentId: number, value: number) :void {
+    debugger
+  }
+
+
+  deleteInstrument(instrumentId: number) :void {
+    debugger
+  }
+
+  setArmedInstrument(instrumentId: number) :void {
+    debugger
+  }
+
+  setInstrumentGain(instrumentId: number, value: number) :void {
+    debugger
   }
 
   renderSimpler(loadingSamples, samplesBuffers) {
@@ -142,9 +165,16 @@ class App extends React.Component<any, any> {
         currentInstrument: instrument.currentInstrument,
         samplesBuffers: samplesBuffers,
         gainNode: this.gainNode,
-        changeSequencedKeyboardView: this.changeSequencedKeyboardView,
+        gain: 0.2,
         isArmed: true,
-        showInstrument: true
+        showInstrument: true,
+
+        changeGridSequence: this.changeGridSequence,
+        changeSequencedKeyboardInstrument: this.changeSequencedKeyboardInstrument,
+        deleteInstrument: this.deleteInstrument,
+        setArmedInstrument: this.setArmedInstrument,
+        setInstrumentGain: this.setInstrumentGain,
+        changeSequencedKeyboardView: this.changeSequencedKeyboardView,
       }
 
       return (
@@ -153,7 +183,8 @@ class App extends React.Component<any, any> {
           style={{
             display: "inline-block",
             marginRight: "20px",
-            verticalAlign: "top"
+            verticalAlign: "top",
+            backgroundColor: '#222'
           }}
         >
           <Instrument

@@ -236,8 +236,9 @@ class NoteGrid extends React.Component {
   }
 
   changeGridSequence(midiNumber, noteLengthBeats, beatNumber) {
-    const {changeGridSequence, trackId, instrumentId, instrument, } = this.props;
-    changeGridSequence(midiNumber, trackId, instrumentId, instrument, noteLengthBeats, beatNumber);
+    debugger
+    const {changeGridSequence, instrumentId } = this.props;
+    changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber);
   }
 
   render() {

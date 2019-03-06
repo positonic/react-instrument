@@ -112,17 +112,14 @@ export function withSequencedKeyboard(
   SequencedKeyboard,
   SoundProvider,
   Parameters,
-  Effects,
-  props
+  Effects
 ) {
-  const { trackId, instrumentId } = props;
+  //const { trackId, instrumentId } = props;
   const midi = null;
 
-
-  let noteGridSettings = getDefaultGridConfig();
-  noteGridSettings.beats = props.instrument.beatsPerLoop;
-
   return class extends React.Component {
+    noteGridSettings
+
     constructor(props) {
       super(props);
 
@@ -135,13 +132,17 @@ export function withSequencedKeyboard(
       this.updateEnvelopeState = this.updateEnvelopeState.bind(this);
       this.onTick = this.onTick.bind(this);
       this.setSelectedNotes = this.setSelectedNotes.bind(this);
+      this.changeGridSequence = this.changeGridSequence.bind(this);
 
       this.state = {
         showAnalyser: false,
         instrument: props.instrument
       };
-
       this.props.timeSequencer.subscribeToTicks(props.instrumentId, this.onTick);
+
+      this.noteGridSettings = getDefaultGridConfig();
+      this.noteGridSettings.beats = props.instrument.beatsPerLoop;
+
     }
 
     static propTypes = {
@@ -165,11 +166,11 @@ export function withSequencedKeyboard(
     }
 
     changeInstrument(evt) {
-      this.props.changeSequencedKeyboardInstrument(trackId, instrumentId, evt.target.value);
+      this.props.changeSequencedKeyboardInstrument(this.props.instrumentId, evt.target.value);
     }
 
     deleteInstrument() {
-      this.props.deleteInstrument(trackId, instrumentId);
+      this.props.deleteInstrument(this.props.instrumentId);
     }
 
     getInstrumentSelector(instrumentNames, currentInstrument) {
@@ -190,12 +191,12 @@ export function withSequencedKeyboard(
     }
 
     activateInstrument() {
-      props.setArmedInstrument(instrumentId);
+      this.props.setArmedInstrument(this.props.instrumentId);
     }
 
-    setInstrumentGain(value) {
-      props.setInstrumentGain(trackId, instrumentId, value);
-    }
+    /*setInstrumentGain(value) {
+      this.props.setInstrumentGain(this.props.instrumentId, value);
+    }*/
 
     updateSynthOscState(oscId, property, value) {
       //this.props.updateSynthOscState(this.props.trackId, this.props.instrumentId, oscId, property, value);
@@ -371,6 +372,11 @@ export function withSequencedKeyboard(
       }));*/
     }
 
+    changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber) {
+      const { instrument } = this.state;
+      this.props.changeGridSequence(midiNumber, instrumentId, instrument, noteLengthBeats, beatNumber)
+    }
+
     render() {
       const {
         audioContext,
@@ -384,7 +390,6 @@ export function withSequencedKeyboard(
         changeSequencedKeyboardView,
         isArmed
       } = this.props;
-
 
       let outputJack = null;
       var Visualiser = null;
@@ -409,7 +414,7 @@ export function withSequencedKeyboard(
             currentInstrument={currentInstrument}
             /*mainOutput={outputJack}*/
             bpm={bpm}
-            gain={props.gain}
+            gain={this.props.gain}
             instrumentId={instrumentId}
             synthConfig={{
               oscillators: instrument.oscillators,
@@ -420,7 +425,7 @@ export function withSequencedKeyboard(
             setVoices={this.setVoices}
             playingVoices={playingVoices}
             samplesBuffers={samplesBuffers}
-            gainNode={props.gainNode}
+            gainNode={this.props.gainNode}
             render={({ isLoading, playNote, playNoteAtTime, stopNote }) => {
               this.playNoteAtTime = playNoteAtTime;
               let pianoSettings = {
@@ -486,13 +491,14 @@ export function withSequencedKeyboard(
                         playNote={playNote}
                         stopNote={stopNote}
                         pianoSettings={pianoSettings}
-                        noteGridSettings={noteGridSettings}
+                        noteGridSettings={this.noteGridSettings}
                         activeView={instrument.view}
                         instrument={instrument}
                         isArmed={isArmed}
                         deleteSelectedNotesState={this.deleteSelectedNotes}
                         changeSequencedKeyboardView={changeSequencedKeyboardView}
-                        {...props}
+                        instrumentId={instrumentId}
+                        changeGridSequence={this.changeGridSequence}
                         render={({
                           changeView,
                           changeNumberOfBeatsLoop,

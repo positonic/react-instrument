@@ -11,13 +11,9 @@ export default function(props) {
     SequencedKeyboard,
     config.provider,
     Parameters,
-    Effects,
-    config
+    Effects
   );
-
-  return (
-    <InstrumentWithSequencedKeyboard
-      audioContext={config.audioContext}
+  /* audioContext={config.audioContext}
       instrumentNames={config.instrumentNames}
       currentInstrument={config.currentInstrument}
       mainOutput={config.mainOutput}
@@ -28,8 +24,17 @@ export default function(props) {
       showInstrument={config.showInstrument}
       samplesBuffers={config.samplesBuffers}
       instrumentGainNode={config.instrumentGainNode}
-      changeSequencedKeyboardInstrument={config.changeSequencedKeyboardInstrument}
       instrumentId={config.instrumentId}
+      gainNode={config.gainNode}
+
+      changeGridSequence={config.changeGridSequence}
+      changeSequencedKeyboardInstrument={config.changeSequencedKeyboardInstrument}
+      changeSequencedKeyboardView={config.changeSequencedKeyboardView}
+*/
+
+  return (
+    <InstrumentWithSequencedKeyboard
+      {...config}
     />
   );
 }

@@ -110,7 +110,8 @@ class SequencedKeyboard extends React.Component {
       setSelectedNotesState,
       instrumentId,
       instrument,
-      activeView
+      activeView,
+      changeGridSequence
     } = this.props;
 
     if (activeView !== 'grid') return null;
@@ -135,15 +136,16 @@ class SequencedKeyboard extends React.Component {
             beatsPerLoop={this.props.noteGridSettings.beats}
             deleteSelectedNotes={this.deleteSelectedNotes}
             audioContext={this.props.audioContext}
+            changeGridSequence={changeGridSequence}
           />
         </NoteGridBox>
       );
     }
   }
   changeView(view) {
-    const { changeSequencedKeyboardView, trackId, instrumentId } = this.props;
+    const { changeSequencedKeyboardView, instrumentId } = this.props;
 
-    changeSequencedKeyboardView(trackId, instrumentId, view);
+    changeSequencedKeyboardView(instrumentId, view);
   }
 
   changeNumberOfBeatsLoop(evt) {
