@@ -75,6 +75,7 @@ class NoteGrid extends React.Component {
     this.beatPixels = props.gridWidthPixels * 4;
 
     this.canvas = React.createRef();
+    this.noteGridScroller = React.createRef();
     this.xpos = 0;
     this.loopBeat = 1;
     this.drawPlayingStylus = this.drawPlayingStylus.bind(this);
@@ -236,9 +237,21 @@ class NoteGrid extends React.Component {
   }
 
   changeGridSequence(midiNumber, noteLengthBeats, beatNumber) {
-    debugger
     const {changeGridSequence, instrumentId } = this.props;
     changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber);
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      const highestNoteMidiNumber = Math.max.apply(Math, this.props.instrumentNotes.map(function(o) { return o.midiNumber; }));
+      console.log('pianoKeys', this.props.pianoKeys);
+      const highestPianoMidiNumber = 127;
+      const differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
+      const keyHeight = 20;
+      const noKeysToPadTop = 10;
+      this.noteGridScroller.current.scrollTop = (differenceToTop - noKeysToPadTop) * keyHeight;
+
+    }, 1000);
   }
 
   render() {
@@ -255,7 +268,7 @@ class NoteGrid extends React.Component {
     const gridWidth = this.calculateWidth(beatsPerLoop);
 
     return (
-      <div className={this.props.className}>
+      <div className={this.props.className} ref={this.noteGridScroller}>
         <Child>
           <canvas onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp} ref={this.canvas} width={gridWidth}
                   height="660"/>
