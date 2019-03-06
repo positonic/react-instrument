@@ -7,8 +7,6 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-require("./App.css");
-
 var _sampler = _interopRequireDefault(require("./data/sampler"));
 
 var sampleLoader = _interopRequireWildcard(require("./SampleLoader"));
