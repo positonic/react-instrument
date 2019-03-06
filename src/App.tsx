@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import "./App.css";
 import Simpler from "./Instrument/Simpler/index";
 import instrument from "./data/sampler";
 import * as sampleLoader from './SampleLoader';
@@ -158,8 +157,8 @@ class App extends React.Component<any, any> {
           }}
         >
           <Instrument
-            config={instrumentConfig}
-          />
+          config={instrumentConfig}
+        />
         </div>
       );
     } else return null;
