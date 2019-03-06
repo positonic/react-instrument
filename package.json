@@ -1,7 +1,8 @@
 {
   "name": "react-instrument",
-  "version": "0.1.0",
-  "private": true,
+  "description": "Looks after UI and and sequencing of your instrument, and lets you have fun building the sound engine",
+  "main": "dist/index.js",
+  "version": "0.0.1",
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@types/jest": "24.0.9",
@@ -24,7 +25,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-scripts build",
+    "build": "babel --out-dir dist src --presets=@babel/preset-env,@babel/preset-react,@babel/preset-typescript --extensions \".ts\",\".tsx\",\".js\",\".jsx\",\".es6\",\".es\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -38,7 +39,23 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.3.4",
+    "@babel/preset-env": "7.3.4",
+    "@babel/preset-react": "7.0.0",
+    "@babel/preset-typescript": "7.3.3",
+    "babel-loader": "8.0.5",
     "prettier": "1.16.4",
     "react-app-rewired": "^2.1.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react",
+      "@babel/preset-typescript"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
   }
 }
