@@ -7,8 +7,6 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _sampler = _interopRequireDefault(require("./data/sampler"));
-
 var sampleLoader = _interopRequireWildcard(require("./SampleLoader"));
 
 var Gain = _interopRequireWildcard(require("./Instrument/audio/Gain"));
@@ -17,13 +15,15 @@ var _nanoevents = _interopRequireDefault(require("nanoevents"));
 
 var _fluentReactPlayButton = _interopRequireDefault(require("fluent-react-play-button"));
 
-var TimeSequencer = _interopRequireWildcard(require("./Instrument/TimeSequencer"));
-
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
-var _Provider = _interopRequireDefault(require("./Provider"));
-
 var _Instrument = _interopRequireDefault(require("./Instrument"));
+
+var TimeSequencer = _interopRequireWildcard(require("./Instrument/TimeSequencer"));
+
+var _SampleProvider = _interopRequireDefault(require("./SampleProvider"));
+
+var _sampler = _interopRequireDefault(require("./data/sampler"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -63,6 +63,11 @@ function _templateObject() {
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
+var Parameters = null;
+
+/*import Provider from './Synth/Provider';
+import Parameters from "./Synth/Parameters";
+import instrument from "./data/synthesizer";*/
 window['fluent'] = window['fluent'] || {};
 window['fluent'].emitter = new _nanoevents.default();
 
@@ -211,15 +216,16 @@ function (_React$Component) {
       });
     }
   }, {
-    key: "renderSimpler",
-    value: function renderSimpler(loadingSamples, samplesBuffers) {
+    key: "renderInstrument",
+    value: function renderInstrument(loadingSamples, samplesBuffers) {
       if (!loadingSamples && samplesBuffers.length > 0) {
         var instrumentConfig = {
-          provider: _Provider.default,
+          provider: _SampleProvider.default,
+          parameters: Parameters,
+          instrument: this.state.instrument,
           audioContext: audioContext,
           mainOutput: this.gainNode,
           timeSequencer: TimeSequencer,
-          instrument: this.state.instrument,
           instrumentId: instrumentIndex,
           instrumentNames: instrumentNames,
           currentInstrument: _sampler.default.currentInstrument,
@@ -280,11 +286,11 @@ function (_React$Component) {
     value: function render() {
       return _react.default.createElement("div", {
         className: "App"
-      }, _react.default.createElement("h2", null, "Sampler"), _react.default.createElement(PlayButtonHolder, null, _react.default.createElement(_fluentReactPlayButton.default, {
+      }, _react.default.createElement("h2", null, "Instrument"), _react.default.createElement(PlayButtonHolder, null, _react.default.createElement(_fluentReactPlayButton.default, {
         playButtonClick: this.playButtonClick,
         class: "mainPlay",
         isPlaying: this.state.isPlaying
-      })), this.renderSimpler(_asyncRequest, this.state.samplesBuffers));
+      })), this.renderInstrument(_asyncRequest, this.state.samplesBuffers));
     }
   }]);
 

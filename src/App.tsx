@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
-import Simpler from "./Instrument/Simpler/index";
-import instrument from "./data/sampler";
 import * as sampleLoader from './SampleLoader';
 import * as Gain from './Instrument/audio/Gain';
 import NanoEvents from "nanoevents";
 import PlayButton from 'fluent-react-play-button';
-import * as TimeSequencer from './Instrument/TimeSequencer';
 import styled from "styled-components";
-
-import Provider from './Provider';
 import Instrument from './Instrument';
 import InstrumentConfig from './Instrument/types/InstrumentConfig';
+import * as TimeSequencer from './Instrument/TimeSequencer';
+
+import Provider from './SampleProvider';
+const Parameters = null;
+import instrument from "./data/sampler";
+
+/*import Provider from './Synth/Provider';
+import Parameters from "./Synth/Parameters";
+import instrument from "./data/synthesizer";*/
+
 
 window['fluent'] = window['fluent'] || {};
 window['fluent'].emitter = new NanoEvents();
@@ -179,15 +184,17 @@ class App extends React.Component<any, any> {
     }));
   }
 
-  renderSimpler(loadingSamples, samplesBuffers) {
+  renderInstrument(loadingSamples, samplesBuffers) {
 
     if(!loadingSamples && samplesBuffers.length > 0) {
       const instrumentConfig: InstrumentConfig = {
         provider: Provider,
+        parameters: Parameters,
+        instrument: this.state.instrument,
+
         audioContext: audioContext,
         mainOutput: this.gainNode,
         timeSequencer: TimeSequencer,
-        instrument: this.state.instrument,
         instrumentId: instrumentIndex,
         instrumentNames: instrumentNames,
         currentInstrument: instrument.currentInstrument,
@@ -254,7 +261,7 @@ class App extends React.Component<any, any> {
   render() {
     return (
       <div className="App">
-        <h2>Sampler</h2>
+        <h2>Instrument</h2>
         <PlayButtonHolder>
           <PlayButton
             playButtonClick={this.playButtonClick}
@@ -262,7 +269,7 @@ class App extends React.Component<any, any> {
             isPlaying={this.state.isPlaying}
           />
         </PlayButtonHolder>
-        {this.renderSimpler(_asyncRequest, this.state.samplesBuffers)}
+        {this.renderInstrument(_asyncRequest, this.state.samplesBuffers)}
       </div>
     );
   }

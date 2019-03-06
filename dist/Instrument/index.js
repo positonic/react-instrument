@@ -19,8 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _default(props) {
   var config = props.config;
-  var Parameters = null;
-  var InstrumentWithSequencedKeyboard = Instrument.withSequencedKeyboard(_SequencedKeyboard.default, config.provider, Parameters, _Effects.default);
+  var InstrumentWithSequencedKeyboard = Instrument.withSequencedKeyboard(_SequencedKeyboard.default, config.provider, config.parameters, config.effects);
   /* audioContext={config.audioContext}
       instrumentNames={config.instrumentNames}
       currentInstrument={config.currentInstrument}

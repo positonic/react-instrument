@@ -1,5 +1,6 @@
 interface InstrumentConfig {
   provider: any;
+  parameters?: any;
   audioContext: AudioContext;
   mainOutput: GainNode;
   timeSequencer: any;

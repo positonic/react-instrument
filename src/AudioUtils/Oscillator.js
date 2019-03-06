@@ -1,4 +1,4 @@
-import * as Voice from "./Voice";
+import * as Voice from "../Synth/Voice";
 
 const Source = (audioContext) => {
   const me = {

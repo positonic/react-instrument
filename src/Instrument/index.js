@@ -6,12 +6,11 @@ import Effects from "./Effects";
 export default function(props) {
   const { config } = props;
 
-  const Parameters = null;
   const InstrumentWithSequencedKeyboard = Instrument.withSequencedKeyboard(
     SequencedKeyboard,
     config.provider,
-    Parameters,
-    Effects
+    config.parameters,
+    config.effects
   );
   /* audioContext={config.audioContext}
       instrumentNames={config.instrumentNames}

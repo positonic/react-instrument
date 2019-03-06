@@ -2,8 +2,8 @@
 // for more documentation on prop options.
 import React from "react";
 import PropTypes from "prop-types";
-import { samplePlayer } from "../../Provider/players/sample";
-import { outputChannel } from "../../Provider/InstrumentOutput";
+import { samplePlayer } from "./players/sample";
+import { outputChannel } from "../InstrumentOutput";
 
 class SampleProvider extends React.Component {
   static propTypes = {

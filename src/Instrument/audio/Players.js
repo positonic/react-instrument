@@ -1,6 +1,6 @@
 import { midiMap } from "./MidiMap";
 import { getNoteLengthSecondsFromBeats, getFrequencyOfNote } from '../utils';
-import { Source } from "./Oscillator";
+import { Source } from "../../AudioUtils/Oscillator";
 
 function PlaySample(audioContext, samples, output) {
   let sampleMap;
