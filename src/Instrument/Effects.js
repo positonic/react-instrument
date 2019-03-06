@@ -22,10 +22,10 @@ class Effects extends React.Component {
   }
 
   toggleFilter(trackId, instrumentId, filterIndex) {
-    alert('Check shouldComponentUpdate in Instrument.js, its not updating at present.')
+    /*alert('Check shouldComponentUpdate in Instrument.js, its not updating at present.')
     return (evt) => {
       this.props.toggleFilter(trackId, instrumentId, filterIndex);
-    };
+    };*/
   }
   render() {
     const {trackId, instrumentId} = this.props;

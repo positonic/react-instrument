@@ -149,11 +149,11 @@ class SequencedKeyboard extends React.Component {
   }
 
   changeNumberOfBeatsLoop(evt) {
-    this.props.changeBeatsPerLoop(this.props.trackId, this.props.instrumentId, evt.target.value);
+    this.props.changeBeatsPerLoop(this.props.instrumentId, evt.target.value);
   }
 
   toggleEffects() {
-    this.props.toggleShowEffects(this.props.trackId, this.props.instrumentId);
+    this.props.toggleShowEffects(this.props.instrumentId);
   }
 
   render() {

@@ -14,6 +14,8 @@ interface InstrumentConfig {
   showInstrument: boolean;
 
   changeGridSequence: (midiNumber: number, instrumentId: number, instrument: any, noteLengthBeats: number, beatNumber: number) => void;
+  changeBeatsPerLoop: (instrumentId: number, value: number) => void;
+  toggleShowEffects: (instrumentId: number) => void;
   changeSequencedKeyboardInstrument: (instrumentId: number, value: number) => void;
   deleteInstrument: (instrumentId: number) => void;
   setArmedInstrument: (instrumentId: number) => void;

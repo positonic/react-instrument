@@ -155,6 +155,7 @@ function (_React$Component) {
     _this.yGridSize = 20;
     _this.beatPixels = props.gridWidthPixels * 4;
     _this.canvas = _react.default.createRef();
+    _this.noteGridScroller = _react.default.createRef();
     _this.xpos = 0;
     _this.loopBeat = 1;
     _this.drawPlayingStylus = _this.drawPlayingStylus.bind(_assertThisInitialized(_this));
@@ -325,11 +326,27 @@ function (_React$Component) {
   }, {
     key: "changeGridSequence",
     value: function changeGridSequence(midiNumber, noteLengthBeats, beatNumber) {
-      debugger;
       var _this$props2 = this.props,
           changeGridSequence = _this$props2.changeGridSequence,
           instrumentId = _this$props2.instrumentId;
       changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber);
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this4 = this;
+
+      setTimeout(function () {
+        var highestNoteMidiNumber = Math.max.apply(Math, _this4.props.instrumentNotes.map(function (o) {
+          return o.midiNumber;
+        }));
+        console.log('pianoKeys', _this4.props.pianoKeys);
+        var highestPianoMidiNumber = 127;
+        var differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
+        var keyHeight = 20;
+        var noKeysToPadTop = 10;
+        _this4.noteGridScroller.current.scrollTop = (differenceToTop - noKeysToPadTop) * keyHeight;
+      }, 1000);
     }
   }, {
     key: "render",
@@ -344,7 +361,8 @@ function (_React$Component) {
           selectedNotes = _this$props3.selectedNotes;
       var gridWidth = this.calculateWidth(beatsPerLoop);
       return _react.default.createElement("div", {
-        className: this.props.className
+        className: this.props.className,
+        ref: this.noteGridScroller
       }, _react.default.createElement(Child, null, _react.default.createElement("canvas", {
         onMouseDown: this.onMouseDown,
         onMouseUp: this.onMouseUp,

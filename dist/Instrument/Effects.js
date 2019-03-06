@@ -81,17 +81,15 @@ function (_React$Component) {
   _createClass(Effects, [{
     key: "toggleFilter",
     value: function toggleFilter(trackId, instrumentId, filterIndex) {
-      var _this2 = this;
-
-      alert('Check shouldComponentUpdate in Instrument.js, its not updating at present.');
-      return function (evt) {
-        _this2.props.toggleFilter(trackId, instrumentId, filterIndex);
-      };
+      /*alert('Check shouldComponentUpdate in Instrument.js, its not updating at present.')
+      return (evt) => {
+        this.props.toggleFilter(trackId, instrumentId, filterIndex);
+      };*/
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       var _this$props = this.props,
           trackId = _this$props.trackId,
@@ -103,7 +101,7 @@ function (_React$Component) {
         return _react.default.createElement(Filter, {
           type: type,
           active: filter.active,
-          onChange: _this3.toggleFilter(trackId, instrumentId, index)
+          onChange: _this2.toggleFilter(trackId, instrumentId, index)
         });
       }), _react.default.createElement("br", {
         className: "clearBoth"

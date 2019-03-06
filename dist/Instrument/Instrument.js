@@ -565,6 +565,8 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
                 isArmed: isArmed,
                 deleteSelectedNotesState: _this5.deleteSelectedNotes,
                 changeSequencedKeyboardView: changeSequencedKeyboardView,
+                changeBeatsPerLoop: _this5.props.changeBeatsPerLoop,
+                toggleShowEffects: _this5.props.toggleShowEffects,
                 instrumentId: instrumentId,
                 changeGridSequence: _this5.changeGridSequence,
                 render: function render(_ref2) {

@@ -93,6 +93,8 @@ class App extends React.Component<any, any> {
     }
     this.playButtonClick = this.playButtonClick.bind(this);
     this.changeSequencedKeyboardView = this.changeSequencedKeyboardView.bind(this);
+    this.toggleShowEffects = this.toggleShowEffects.bind(this);
+    this.changeBeatsPerLoop = this.changeBeatsPerLoop.bind(this);
 
     this.gainNode = Gain.create(audioContext, audioContext.destination, instrument.gain);
 
@@ -151,6 +153,32 @@ class App extends React.Component<any, any> {
     debugger
   }
 
+  changeBeatsPerLoop(instrumentId: number, value: number) :void {
+    //this.props.changeBeatsPerLoop(this.props.trackId, this.props.instrumentId, evt.target.value);
+    const {showEffects} = this.state.instrument;
+
+    this.setState(state => ({
+      ...state,
+      instrument: {
+        ...state.instrument,
+        beatsPerLoop: value
+      }
+    }));
+  }
+
+  toggleShowEffects(instrumentId: number) :void {
+    //this.props.toggleShowEffects(this.props.trackId, this.props.instrumentId);
+    const {showEffects} = this.state.instrument;
+
+    this.setState(state => ({
+      ...state,
+      instrument: {
+        ...state.instrument,
+        showEffects: !showEffects
+      }
+    }));
+  }
+
   renderSimpler(loadingSamples, samplesBuffers) {
 
     if(!loadingSamples && samplesBuffers.length > 0) {
@@ -170,6 +198,8 @@ class App extends React.Component<any, any> {
         showInstrument: true,
 
         changeGridSequence: this.changeGridSequence,
+        changeBeatsPerLoop: this.changeBeatsPerLoop,
+        toggleShowEffects: this.toggleShowEffects,
         changeSequencedKeyboardInstrument: this.changeSequencedKeyboardInstrument,
         deleteInstrument: this.deleteInstrument,
         setArmedInstrument: this.setArmedInstrument,

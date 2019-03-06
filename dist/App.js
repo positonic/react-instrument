@@ -121,6 +121,8 @@ function (_React$Component) {
     };
     _this.playButtonClick = _this.playButtonClick.bind(_assertThisInitialized(_this));
     _this.changeSequencedKeyboardView = _this.changeSequencedKeyboardView.bind(_assertThisInitialized(_this));
+    _this.toggleShowEffects = _this.toggleShowEffects.bind(_assertThisInitialized(_this));
+    _this.changeBeatsPerLoop = _this.changeBeatsPerLoop.bind(_assertThisInitialized(_this));
     _this.gainNode = Gain.create(audioContext, audioContext.destination, _sampler.default.gain);
     return _this;
   }
@@ -183,6 +185,32 @@ function (_React$Component) {
       debugger;
     }
   }, {
+    key: "changeBeatsPerLoop",
+    value: function changeBeatsPerLoop(instrumentId, value) {
+      //this.props.changeBeatsPerLoop(this.props.trackId, this.props.instrumentId, evt.target.value);
+      var showEffects = this.state.instrument.showEffects;
+      this.setState(function (state) {
+        return _objectSpread({}, state, {
+          instrument: _objectSpread({}, state.instrument, {
+            beatsPerLoop: value
+          })
+        });
+      });
+    }
+  }, {
+    key: "toggleShowEffects",
+    value: function toggleShowEffects(instrumentId) {
+      //this.props.toggleShowEffects(this.props.trackId, this.props.instrumentId);
+      var showEffects = this.state.instrument.showEffects;
+      this.setState(function (state) {
+        return _objectSpread({}, state, {
+          instrument: _objectSpread({}, state.instrument, {
+            showEffects: !showEffects
+          })
+        });
+      });
+    }
+  }, {
     key: "renderSimpler",
     value: function renderSimpler(loadingSamples, samplesBuffers) {
       if (!loadingSamples && samplesBuffers.length > 0) {
@@ -201,6 +229,8 @@ function (_React$Component) {
           isArmed: true,
           showInstrument: true,
           changeGridSequence: this.changeGridSequence,
+          changeBeatsPerLoop: this.changeBeatsPerLoop,
+          toggleShowEffects: this.toggleShowEffects,
           changeSequencedKeyboardInstrument: this.changeSequencedKeyboardInstrument,
           deleteInstrument: this.deleteInstrument,
           setArmedInstrument: this.setArmedInstrument,

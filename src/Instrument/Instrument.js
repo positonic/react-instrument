@@ -497,6 +497,8 @@ export function withSequencedKeyboard(
                         isArmed={isArmed}
                         deleteSelectedNotesState={this.deleteSelectedNotes}
                         changeSequencedKeyboardView={changeSequencedKeyboardView}
+                        changeBeatsPerLoop={this.props.changeBeatsPerLoop}
+                        toggleShowEffects={this.props.toggleShowEffects}
                         instrumentId={instrumentId}
                         changeGridSequence={this.changeGridSequence}
                         render={({
