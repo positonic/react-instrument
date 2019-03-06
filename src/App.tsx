@@ -5,9 +5,23 @@ import instrument from "./data/sampler";
 import * as sampleLoader from './SampleLoader';
 import * as Gain from './instruments/audio/Gain';
 import NanoEvents from "nanoevents";
+import PlayButton from 'fluent-react-play-button';
+import * as TimeSequencer from './instruments/TimeSequencer';
+import styled from "styled-components";
 
 window['fluent'] = window['fluent'] || {};
 window['fluent'].emitter = new NanoEvents();
+
+const PlayButtonHolder = styled.a`
+  float:right;
+  cursor: pointer;
+  i {
+    font-size: 40px;
+  }
+  i:hover {
+    color: #01A9E8;
+    }
+`;
 
 const audioContext = new AudioContext();
 
@@ -62,15 +76,25 @@ const instrumentIndex = 0;
 var _asyncRequest;
 
 class App extends React.Component<any, any> {
+
+  gainNode
+
   constructor(props) {
     super(props);
     this.state = {
       samplesBuffers: [],
-      instrument: instrument
+      instrument: instrument,
+      isPlaying: false
     }
+    this.playButtonClick = this.playButtonClick.bind(this);
     this.changeSequencedKeyboardView = this.changeSequencedKeyboardView.bind(this);
   }
+
   componentDidMount() {
+    this.gainNode = Gain.create(audioContext, audioContext.destination, instrument.gain);
+
+    TimeSequencer.init(audioContext, this.gainNode);
+
     _asyncRequest = sampleLoader
         .init(audioContext, sampleFilePaths)
         .then(loadedSamplesBuffers => {
@@ -103,8 +127,6 @@ class App extends React.Component<any, any> {
 
     if(!loadingSamples && samplesBuffers.length > 0) {
 
-      let gainNode = Gain.create(audioContext, audioContext.destination, instrument.gain);
-
       return (
         <div
           className="instrument"
@@ -116,13 +138,14 @@ class App extends React.Component<any, any> {
         >
           <Simpler
             audioContext={audioContext}
-            mainOutput={gainNode}
+            mainOutput={this.gainNode}
+            timeSequencer={TimeSequencer}
             instrument={this.state.instrument}
             instrumentId={instrumentIndex}
             instrumentNames={instrumentNames}
             currentInstrument={instrument.currentInstrument}
             samplesBuffers={samplesBuffers}
-            gainNode={gainNode}
+            gainNode={this.gainNode}
             changeSequencedKeyboardView={this.changeSequencedKeyboardView}
           />
         </div>
@@ -130,10 +153,43 @@ class App extends React.Component<any, any> {
     } else return null;
   }
 
+  playButtonClick() {
+
+    if (this.state.isPlaying === false) {
+      TimeSequencer.play();
+      window['fluent'].emitter.emit('togglePlay', {
+        isPlaying: true,
+        startTime: audioContext.currentTime,
+        bpm: 120
+      });
+      this.setState({
+        isPlaying: true
+      });
+    } else {
+      TimeSequencer.stop();
+      window['fluent'].emitter.emit('togglePlay', {
+        isPlaying: false,
+        startTime: audioContext.currentTime,
+        bpm: 120
+      });
+
+      this.setState({
+        isPlaying: false
+      })
+    }
+  }
+
   render() {
     return (
       <div className="App">
         <h2>Sampler</h2>
+        <PlayButtonHolder>
+          <PlayButton
+            playButtonClick={this.playButtonClick}
+            class="mainPlay"
+            isPlaying={this.state.isPlaying}
+          />
+        </PlayButtonHolder>
         {this.renderSimpler(_asyncRequest, this.state.samplesBuffers)}
       </div>
     );

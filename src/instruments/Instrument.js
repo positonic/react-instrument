@@ -353,8 +353,7 @@ export function withSequencedKeyboard(
     }
 
     deleteSelectedNotes(notesToDelete) {
-
-      debugger
+      
       /*const notes = fromJS(this.state.instrument.notes).update(notesIndex, arr => {
         let newNotes;
         notesToDelete.forEach(noteIndex => {

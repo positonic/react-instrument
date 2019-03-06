@@ -3,7 +3,6 @@ import SequencedKeyboard from '../SequencedKeyboard';
 import SampleProvider from './SampleProvider';
 import * as Instrument from '../Instrument';
 import Effects from "../Effects";
-import * as TimeSequencer from '../TimeSequencer';
 
 export default function(props) {
   const Parameters = null;
@@ -15,8 +14,6 @@ export default function(props) {
     props
   );
 
-  TimeSequencer.init(props.audioContext, props.mainOutput, 4);
-
   return (
     <SimplerWithSequencedKeyboard
       audioContext={props.audioContext}
@@ -25,12 +22,13 @@ export default function(props) {
       mainOutput={props.mainOutput}
       onToggle={props.onToggle}
       instrument={props.instrument}
-      timeSequencer={TimeSequencer}
+      timeSequencer={props.timeSequencer}
       isArmed={true}
       showInstrument={(true)}
       samplesBuffers={props.samplesBuffers}
       instrumentGainNode={props.instrumentGainNode}
       changeSequencedKeyboardInstrument={props.changeSequencedKeyboardInstrument}
+      instrumentId={props.instrumentId}
     />
   );
 }

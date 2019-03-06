@@ -82,6 +82,7 @@ function scheduler() {
 
 export function play() {
 
+  debugger
   isPlaying = !isPlaying;
 
   if (isPlaying) {
