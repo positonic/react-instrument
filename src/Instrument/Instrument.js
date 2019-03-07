@@ -497,8 +497,6 @@ export function withSequencedKeyboard(
 
               let instrumentEffects;
 
-              console.log('Effects is ', Effects, instrument.showEffects);
-
               if (Effects && instrument.showEffects === true)
                 instrumentEffects = <Effects instrument={instrument} instrumentId={instrumentId} toggleFilter={this.toggleFilter} />;
               else instrumentEffects = '';
