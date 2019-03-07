@@ -7,13 +7,36 @@ exports.Source = void 0;
 
 var Voice = _interopRequireWildcard(require("../Synth/Voice"));
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireWildcard(obj) {
+  if (obj && obj.__esModule) {
+    return obj;
+  } else {
+    var newObj = {};
+    if (obj != null) {
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          var desc =
+            Object.defineProperty && Object.getOwnPropertyDescriptor
+              ? Object.getOwnPropertyDescriptor(obj, key)
+              : {};
+          if (desc.get || desc.set) {
+            Object.defineProperty(newObj, key, desc);
+          } else {
+            newObj[key] = obj[key];
+          }
+        }
+      }
+    }
+    newObj.default = obj;
+    return newObj;
+  }
+}
 
 var Source = function Source(audioContext) {
   var me = {
     setupOscillators: function setupOscillators(oscillatorConfigurations) {
       var oscillators = [];
-      oscillatorConfigurations.forEach(function (osc) {
+      oscillatorConfigurations.forEach(function(osc) {
         oscillators.push(me.createOscillator(osc));
       });
       return oscillators;
@@ -28,7 +51,10 @@ var Source = function Source(audioContext) {
       vco.gainNode = me.addOscillatorGain(vco, 0);
       return vco;
     },
-    connectInputToOutput: function connectInputToOutput(oscillatorGain, output) {
+    connectInputToOutput: function connectInputToOutput(
+      oscillatorGain,
+      output
+    ) {
       oscillatorGain.connect(output);
     },
     addOscillatorGain: function addOscillatorGain(vco, vcoGain) {
@@ -44,7 +70,17 @@ var Source = function Source(audioContext) {
 
       return vco;
     },
-    setPipeLengthOnOscillator: function setPipeLengthOnOscillator(vco, pipeLength) {
+    applyGain: function applyGain(vco, tuning) {
+      if (tuning !== 0) {
+        vco.detune.value = tuning;
+      }
+
+      return vco;
+    },
+    setPipeLengthOnOscillator: function setPipeLengthOnOscillator(
+      vco,
+      pipeLength
+    ) {
       if (pipeLength !== 0) {
         vco.pipeLength = pipeLength;
       }
@@ -66,14 +102,21 @@ var Source = function Source(audioContext) {
      * @param releaseTime
      * @returns {Array} array of sources / oscillatorys
      */
-    play: function play(time, noteLengthInSeconds, frequency, output, oscillators, ampEnvelope) {
+    play: function play(
+      time,
+      noteLengthInSeconds,
+      frequency,
+      output,
+      oscillators,
+      ampEnvelope
+    ) {
       var attackTime = audioContext.currentTime + ampEnvelope.attack / 100;
       var sustainPercentage = ampEnvelope.sustain / 100;
       var decayPercentage = ampEnvelope.decay / 100;
       var release = audioContext.currentTime + ampEnvelope.release / 10.0;
       var voices = []; //A voice is an array of IVoice = oscillators or sources and vcas
 
-      oscillators.forEach(function (osc) {
+      oscillators.forEach(function(osc) {
         var oscGain = osc.gain / 100;
         var sustainVolume = sustainPercentage * oscGain;
         var envAttackEnd = audioContext.currentTime + attackTime / 20; //Start of Amp envelope:
@@ -82,7 +125,11 @@ var Source = function Source(audioContext) {
         osc.gainNode.gain.setValueAtTime(0.0, audioContext.currentTime); //Before - oscGainNode.gain.linearRampToValueAtTime(oscGain, attackTime);
 
         osc.gainNode.gain.linearRampToValueAtTime(oscGain, envAttackEnd);
-        osc.gainNode.gain.setTargetAtTime(sustainVolume, envAttackEnd, decayPercentage + 0.001); //End Amp envelope
+        osc.gainNode.gain.setTargetAtTime(
+          sustainVolume,
+          envAttackEnd,
+          decayPercentage + 0.001
+        ); //End Amp envelope
 
         me.connectInputToOutput(osc.gainNode, output[0]);
         me.start(osc, time, noteLengthInSeconds, frequency);

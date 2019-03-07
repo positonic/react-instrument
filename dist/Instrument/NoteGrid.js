@@ -142,7 +142,7 @@ function _templateObject6() {
 
 function _templateObject5() {
   var data = _taggedTemplateLiteral([
-    "\n  height: 20px;\n  background-color: black;\n  width: 66%;\n  border-bottom: 1px solid #d8d7dd;\n"
+    "\n  height: 19px;\n  background-color: black;\n  width: 66%;\n  border-bottom: 1px solid #d8d7dd;\n"
   ]);
 
   _templateObject5 = function _templateObject5() {
@@ -154,7 +154,7 @@ function _templateObject5() {
 
 function _templateObject4() {
   var data = _taggedTemplateLiteral([
-    "\n  height: 20px;\n  width: 100%;\n  background-color: whitesmoke;\n  border-bottom: 1px solid #d8d7dd;\n"
+    "\n  height: 19px;\n  width: 100%;\n  background-color: whitesmoke;\n  border-bottom: 1px solid #d8d7dd;\n"
   ]);
 
   _templateObject4 = function _templateObject4() {
@@ -166,7 +166,7 @@ function _templateObject4() {
 
 function _templateObject3() {
   var data = _taggedTemplateLiteral([
-    "\n  height: 20px;\n  background-color: ",
+    "\n  height: 19px;\n  background-color: ",
     ";\n  width: 100%;\n  border-bottom: 1px solid #d8d7dd;\n  color: #333;\n  font-size: 13px;\n  line-height: 20px;\n  text-align: right;\n"
   ]);
 
@@ -257,7 +257,6 @@ var NoteGrid =
       _this.canvas = _react.default.createRef();
       _this.noteGridScroller = _react.default.createRef();
       _this.xpos = 0;
-      _this.loopBeat = 1;
       _this.drawPlayingStylus = _this.drawPlayingStylus.bind(
         _assertThisInitialized(_this)
       );
@@ -367,21 +366,24 @@ var NoteGrid =
           this.canvasContext.lineWidth = 1;
           window.fluent.emitter.on("togglePlay", this.togglePlay);
           document.addEventListener("keydown", this.onKeyDown);
-          setTimeout(function() {
-            var highestNoteMidiNumber = Math.max.apply(
-              Math,
-              _this3.props.instrumentNotes.map(function(o) {
-                return o.midiNumber;
-              })
-            );
-            var highestPianoMidiNumber = 127;
-            var differenceToTop =
-              highestPianoMidiNumber - highestNoteMidiNumber;
-            var keyHeight = 20;
-            var noKeysToPadTop = 10;
-            _this3.noteGridScroller.current.scrollTop =
-              (differenceToTop - noKeysToPadTop) * keyHeight;
-          }, 500);
+
+          if (this.props.firstRender) {
+            setTimeout(function() {
+              var highestNoteMidiNumber = Math.max.apply(
+                Math,
+                _this3.props.instrumentNotes.map(function(o) {
+                  return o.midiNumber;
+                })
+              );
+              var highestPianoMidiNumber = 127;
+              var differenceToTop =
+                highestPianoMidiNumber - highestNoteMidiNumber;
+              var keyHeight = 20;
+              var noKeysToPadTop = 10;
+              _this3.noteGridScroller.current.scrollTop =
+                (differenceToTop - noKeysToPadTop) * keyHeight;
+            }, 500);
+          }
         }
       },
       {
@@ -525,7 +527,8 @@ var NoteGrid =
           return _react.default.createElement(
             "div",
             {
-              className: this.props.className
+              className: this.props.className,
+              ref: this.noteGridScroller
             },
             _react.default.createElement(
               Child,

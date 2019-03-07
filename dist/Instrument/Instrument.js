@@ -204,7 +204,7 @@ function _templateObject4() {
 
 function _templateObject3() {
   var data = _taggedTemplateLiteral([
-    "\n  float: left;\n\n  .body {\n    position: relative;\n    float: left;\n    width:100%;\n \n  }\n"
+    "\n  float: left;\n\n  .body {\n    position: relative;\n    float: left;\n    width: 100%;\n  }\n"
   ]);
 
   _templateObject3 = function _templateObject3() {
@@ -216,7 +216,7 @@ function _templateObject3() {
 
 function _templateObject2() {
   var data = _taggedTemplateLiteral([
-    "\n  width:100%;\n  color: white;\n  font-size: 1.5em;\n  margin: 10px auto 0;\n  position: relative;\n  h3 {\n    color: white;\n    font-size: 28px;\n}\n"
+    "\n  width: 100%;\n  color: white;\n  font-size: 1.5em;\n  margin: 10px auto 0;\n  position: relative;\n  h3 {\n    color: white;\n    font-size: 28px;\n  }\n"
   ]);
 
   _templateObject2 = function _templateObject2() {
@@ -228,7 +228,7 @@ function _templateObject2() {
 
 function _templateObject() {
   var data = _taggedTemplateLiteral([
-    "\n  float: left;\n  .body {\n    position: relative;\n    float: left;\n    width:100%; \n  }\n"
+    "\n  float: left;\n  .body {\n    position: relative;\n    float: left;\n    width: 100%;\n  }\n"
   ]);
 
   _templateObject = function _templateObject() {
@@ -416,6 +416,7 @@ function withSequencedKeyboard(
 
           _this.noteGridSettings = getDefaultGridConfig();
           _this.noteGridSettings.beats = props.instrument.beatsPerLoop;
+          _this.firstRender = true;
           return _this;
         }
 
@@ -433,6 +434,7 @@ function withSequencedKeyboard(
                 nextProps.instrument !== this.props.instrument ||
                 nextState.instrument !== this.state.instrument
               ) {
+                this.firstRender = false;
                 return true;
               }
 
@@ -928,6 +930,7 @@ function withSequencedKeyboard(
                             currentInstrument
                           ),
                           _react.default.createElement(SequencedKeyboard, {
+                            firstRender: _this5.firstRender,
                             audioContext: _this5.props.audioContext,
                             setSelectedNotesState: _this5.setSelectedNotes,
                             playNote: playNote,
