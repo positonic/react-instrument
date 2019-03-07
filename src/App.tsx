@@ -216,6 +216,7 @@ class App extends React.Component<any, any> {
         isArmed: true,
         showInstrument: true,
         bpm: 120,
+        isSaved: true,
 
         changeGridSequence: this.changeGridSequence,
         changeBeatsPerLoop: this.changeBeatsPerLoop,

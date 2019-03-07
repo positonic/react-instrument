@@ -157,8 +157,6 @@ export function withSequencedKeyboard(
 
       this.noteGridSettings = getDefaultGridConfig();
       this.noteGridSettings.beats = props.instrument.beatsPerLoop;
-
-      this.firstRender = true;
     }
 
     static propTypes = {
@@ -178,7 +176,6 @@ export function withSequencedKeyboard(
         nextProps.instrument !== this.props.instrument ||
         nextState.instrument !== this.state.instrument
       ) {
-        this.firstRender = false;
         return true;
       }
 
@@ -580,7 +577,7 @@ export function withSequencedKeyboard(
                       )}
 
                       <SequencedKeyboard
-                        firstRender={this.firstRender}
+                        isSaved={this.props.isSaved}
                         audioContext={this.props.audioContext}
                         setSelectedNotesState={this.setSelectedNotes}
                         playNote={playNote}

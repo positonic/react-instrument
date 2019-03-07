@@ -141,7 +141,7 @@ class SequencedKeyboard extends React.Component {
             deleteSelectedNotes={this.deleteSelectedNotes}
             audioContext={this.props.audioContext}
             changeGridSequence={changeGridSequence}
-            firstRender={this.props.firstRender}
+            isSaved={this.props.isSaved}
           />
         </NoteGridBox>
       );
