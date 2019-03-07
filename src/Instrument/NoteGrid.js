@@ -142,7 +142,7 @@ class NoteGrid extends React.Component {
 
     setTimeout(() => {
       const highestNoteMidiNumber = Math.max.apply(Math, this.props.instrumentNotes.map(function(o) { return o.midiNumber; }));
-      console.log('pianoKeys', this.props.pianoKeys);
+
       const highestPianoMidiNumber = 127;
       const differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
       const keyHeight = 20;
