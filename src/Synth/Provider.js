@@ -68,10 +68,6 @@ class SynthProvider extends React.Component {
     this.stopAllNotes();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('componentDidUpdate ', this.props.filters[0].props.value);
-  }
-
   playNoteAtTime = (midiNumber, time, noteLengthInSeconds) => {
 
     const { currentInstrument, bpm, synthConfig } = this.props;

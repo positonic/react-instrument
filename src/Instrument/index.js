@@ -10,7 +10,8 @@ export default function(props) {
     SequencedKeyboard,
     config.provider,
     config.parameters,
-    config.effects
+    config.effects,
+    config
   );
   /* audioContext={config.audioContext}
       instrumentNames={config.instrumentNames}

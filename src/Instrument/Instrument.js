@@ -15,6 +15,7 @@ import BeatsPerLoopSelector from './controls/BeatsPerLoopSelector';
 import ToggleMoreSettings from './controls/ToggleMoreSettings';
 import {SetMidiCallbacks } from './controls/Midi';
 import AudioVisualiser from "./AudioVisualiser";
+import NoteGrid from "./SequencedKeyboard";
 
 const SequencedKeyboardContainer = styled.div`
   float: left;
@@ -529,6 +530,7 @@ export function withSequencedKeyboard(
                       {this.getInstrumentSelector(instrumentNames, currentInstrument)}
 
                       <SequencedKeyboard
+                        audioContext={this.props.audioContext}
                         setSelectedNotesState={this.setSelectedNotes}
                         playNote={playNote}
                         stopNote={stopNote}

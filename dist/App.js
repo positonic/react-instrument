@@ -246,6 +246,7 @@ function (_React$Component) {
           gain: 0.2,
           isArmed: true,
           showInstrument: true,
+          bpm: 120,
           changeGridSequence: this.changeGridSequence,
           changeBeatsPerLoop: this.changeBeatsPerLoop,
           toggleShowEffects: this.toggleShowEffects,

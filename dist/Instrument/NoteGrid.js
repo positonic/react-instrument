@@ -223,6 +223,8 @@ function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
+      var _this3 = this;
+
       var canvas = this.canvas.current;
       this.canvasContext = canvas.getContext('2d');
       this.canvasContext.translate(18.75 + 4, 0); // make 0, next to the piano keys
@@ -233,15 +235,26 @@ function (_React$Component) {
       this.canvasContext.lineWidth = 1;
       window.fluent.emitter.on('togglePlay', this.togglePlay);
       document.addEventListener('keydown', this.onKeyDown);
+      setTimeout(function () {
+        var highestNoteMidiNumber = Math.max.apply(Math, _this3.props.instrumentNotes.map(function (o) {
+          return o.midiNumber;
+        }));
+        console.log('pianoKeys', _this3.props.pianoKeys);
+        var highestPianoMidiNumber = 127;
+        var differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
+        var keyHeight = 20;
+        var noKeysToPadTop = 10;
+        _this3.noteGridScroller.current.scrollTop = (differenceToTop - noKeysToPadTop) * keyHeight;
+      }, 500);
     }
   }, {
     key: "togglePlay",
     value: function togglePlay(playObj) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (playObj.isPlaying === true) {
         var stylusInterval = setInterval(function () {
-          requestAnimationFrame(_this3.drawPlayingStylus);
+          requestAnimationFrame(_this4.drawPlayingStylus);
         }, 1000 / 60);
         this.setState({
           startTime: playObj.startTime,
@@ -332,23 +345,6 @@ function (_React$Component) {
       changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber);
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this4 = this;
-
-      setTimeout(function () {
-        var highestNoteMidiNumber = Math.max.apply(Math, _this4.props.instrumentNotes.map(function (o) {
-          return o.midiNumber;
-        }));
-        console.log('pianoKeys', _this4.props.pianoKeys);
-        var highestPianoMidiNumber = 127;
-        var differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
-        var keyHeight = 20;
-        var noKeysToPadTop = 10;
-        _this4.noteGridScroller.current.scrollTop = (differenceToTop - noKeysToPadTop) * keyHeight;
-      }, 1000);
-    }
-  }, {
     key: "render",
     value: function render() {
       var _this$props3 = this.props,
@@ -361,8 +357,7 @@ function (_React$Component) {
           selectedNotes = _this$props3.selectedNotes;
       var gridWidth = this.calculateWidth(beatsPerLoop);
       return _react.default.createElement("div", {
-        className: this.props.className,
-        ref: this.noteGridScroller
+        className: this.props.className
       }, _react.default.createElement(Child, null, _react.default.createElement("canvas", {
         onMouseDown: this.onMouseDown,
         onMouseUp: this.onMouseUp,

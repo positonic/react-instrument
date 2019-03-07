@@ -30,6 +30,8 @@ var _Midi = require("./controls/Midi");
 
 var _AudioVisualiser = _interopRequireDefault(require("./AudioVisualiser"));
 
+var _SequencedKeyboard = _interopRequireDefault(require("./SequencedKeyboard"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -590,6 +592,7 @@ function withSequencedKeyboard(SequencedKeyboard, SoundProvider, Parameters, Eff
                   return o.name === currentInstrument;
                 })[0].buffer);
               }(_this5.state.showAnalyser, currentInstrument, samplesBuffers), _this5.getInstrumentSelector(instrumentNames, currentInstrument), _react.default.createElement(SequencedKeyboard, {
+                audioContext: _this5.props.audioContext,
                 setSelectedNotesState: _this5.setSelectedNotes,
                 playNote: playNote,
                 stopNote: stopNote,

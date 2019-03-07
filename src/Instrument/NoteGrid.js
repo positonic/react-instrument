@@ -139,6 +139,17 @@ class NoteGrid extends React.Component {
 
     window.fluent.emitter.on('togglePlay', this.togglePlay);
     document.addEventListener('keydown', this.onKeyDown);
+
+    setTimeout(() => {
+      const highestNoteMidiNumber = Math.max.apply(Math, this.props.instrumentNotes.map(function(o) { return o.midiNumber; }));
+      console.log('pianoKeys', this.props.pianoKeys);
+      const highestPianoMidiNumber = 127;
+      const differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
+      const keyHeight = 20;
+      const noKeysToPadTop = 10;
+      this.noteGridScroller.current.scrollTop = (differenceToTop - noKeysToPadTop) * keyHeight;
+
+    }, 500);
   }
 
   togglePlay(playObj) {
@@ -165,6 +176,7 @@ class NoteGrid extends React.Component {
   }
 
   calculateXPos() {
+
     const secondsPassed = this.props.audioContext.currentTime - this.state.startTime;
     const beatsPerSecond = this.state.bpm / 60;
     const beatsPassed = secondsPassed * beatsPerSecond;
@@ -241,19 +253,6 @@ class NoteGrid extends React.Component {
     changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber);
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      const highestNoteMidiNumber = Math.max.apply(Math, this.props.instrumentNotes.map(function(o) { return o.midiNumber; }));
-      console.log('pianoKeys', this.props.pianoKeys);
-      const highestPianoMidiNumber = 127;
-      const differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
-      const keyHeight = 20;
-      const noKeysToPadTop = 10;
-      this.noteGridScroller.current.scrollTop = (differenceToTop - noKeysToPadTop) * keyHeight;
-
-    }, 1000);
-  }
-
   render() {
     const {
       beatsPerLoop,
@@ -268,7 +267,7 @@ class NoteGrid extends React.Component {
     const gridWidth = this.calculateWidth(beatsPerLoop);
 
     return (
-      <div className={this.props.className} ref={this.noteGridScroller}>
+      <div className={this.props.className}>
         <Child>
           <canvas onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp} ref={this.canvas} width={gridWidth}
                   height="660"/>

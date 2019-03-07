@@ -176,11 +176,6 @@ function (_React$Component) {
       this.stopAllNotes();
     }
   }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps, prevState, snapshot) {
-      console.log('componentDidUpdate ', this.props.filters[0].props.value);
-    }
-  }, {
     key: "render",
     value: function render() {
       return this.props.render({

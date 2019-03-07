@@ -14,6 +14,7 @@ interface InstrumentConfig {
   gain: number;
   isArmed: boolean;
   showInstrument: boolean;
+  bpm: number;
 
   changeGridSequence: (midiNumber: number, instrumentId: number, instrument: any, noteLengthBeats: number, beatNumber: number) => void;
   changeBeatsPerLoop: (instrumentId: number, value: number) => void;
