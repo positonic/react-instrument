@@ -300,7 +300,7 @@ var SequencedKeyboard =
                 deleteSelectedNotes: this.deleteSelectedNotes,
                 audioContext: this.props.audioContext,
                 changeGridSequence: changeGridSequence,
-                firstRender: this.props.firstRender
+                isSaved: this.props.isSaved
               })
             );
           }

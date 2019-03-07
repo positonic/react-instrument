@@ -247,6 +247,7 @@ function (_React$Component) {
           isArmed: true,
           showInstrument: true,
           bpm: 120,
+          isSaved: true,
           changeGridSequence: this.changeGridSequence,
           changeBeatsPerLoop: this.changeBeatsPerLoop,
           toggleShowEffects: this.toggleShowEffects,

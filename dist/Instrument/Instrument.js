@@ -416,7 +416,6 @@ function withSequencedKeyboard(
 
           _this.noteGridSettings = getDefaultGridConfig();
           _this.noteGridSettings.beats = props.instrument.beatsPerLoop;
-          _this.firstRender = true;
           return _this;
         }
 
@@ -434,7 +433,6 @@ function withSequencedKeyboard(
                 nextProps.instrument !== this.props.instrument ||
                 nextState.instrument !== this.state.instrument
               ) {
-                this.firstRender = false;
                 return true;
               }
 
@@ -930,7 +928,7 @@ function withSequencedKeyboard(
                             currentInstrument
                           ),
                           _react.default.createElement(SequencedKeyboard, {
-                            firstRender: _this5.firstRender,
+                            isSaved: _this5.props.isSaved,
                             audioContext: _this5.props.audioContext,
                             setSelectedNotesState: _this5.setSelectedNotes,
                             playNote: playNote,

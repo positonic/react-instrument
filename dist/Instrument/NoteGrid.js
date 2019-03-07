@@ -367,7 +367,7 @@ var NoteGrid =
           window.fluent.emitter.on("togglePlay", this.togglePlay);
           document.addEventListener("keydown", this.onKeyDown);
 
-          if (this.props.firstRender) {
+          if (this.props.isSaved === true) {
             setTimeout(function() {
               var highestNoteMidiNumber = Math.max.apply(
                 Math,
