@@ -17,7 +17,7 @@ const NoteGridBlock = styled.div`
 `;
 
 const PianoKey = styled.div`
-  height: 20px;
+  height: 19px;
   background-color: ${props =>
     props.isMiddleC ? "floralwhite" : "whitesmoke"};
   width: 100%;
@@ -29,14 +29,14 @@ const PianoKey = styled.div`
 `;
 
 const PianoKeyHolder = styled.div`
-  height: 20px;
+  height: 19px;
   width: 100%;
   background-color: whitesmoke;
   border-bottom: 1px solid #d8d7dd;
 `;
 
 const PianoKeyBlack = styled.div`
-  height: 20px;
+  height: 19px;
   background-color: black;
   width: 66%;
   border-bottom: 1px solid #d8d7dd;
