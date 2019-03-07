@@ -1,6 +1,6 @@
 import * as Voice from "../Synth/Voice";
 
-const Source = (audioContext) => {
+const Source = audioContext => {
   const me = {
     setupOscillators(oscillatorConfigurations) {
       let oscillators = [];
@@ -41,6 +41,14 @@ const Source = (audioContext) => {
       return vco;
     },
 
+    applyGain(vco, tuning) {
+      if (tuning !== 0) {
+        vco.detune.value = tuning;
+      }
+
+      return vco;
+    },
+
     setPipeLengthOnOscillator(vco, pipeLength) {
       if (pipeLength !== 0) {
         vco.pipeLength = pipeLength;
@@ -67,36 +75,37 @@ const Source = (audioContext) => {
     play: (
       time,
       noteLengthInSeconds,
-      frequency, output, oscillators, ampEnvelope
+      frequency,
+      output,
+      oscillators,
+      ampEnvelope
     ) => {
-
       let attackTime = audioContext.currentTime + ampEnvelope.attack / 100;
       let sustainPercentage = ampEnvelope.sustain / 100;
       let decayPercentage = ampEnvelope.decay / 100;
       let release = audioContext.currentTime + ampEnvelope.release / 10.0;
 
-      let voices = [];   //A voice is an array of IVoice = oscillators or sources and vcas
+      let voices = []; //A voice is an array of IVoice = oscillators or sources and vcas
       oscillators.forEach(osc => {
-
         let oscGain = osc.gain / 100;
         let sustainVolume = sustainPercentage * oscGain;
-        let envAttackEnd = audioContext.currentTime + (attackTime/20);
+        let envAttackEnd = audioContext.currentTime + attackTime / 20;
 
         //Start of Amp envelope:
         osc.gainNode.gain.value = 0.0;
-        osc.gainNode.gain.setValueAtTime( 0.0, audioContext.currentTime );
+        osc.gainNode.gain.setValueAtTime(0.0, audioContext.currentTime);
         //Before - oscGainNode.gain.linearRampToValueAtTime(oscGain, attackTime);
         osc.gainNode.gain.linearRampToValueAtTime(oscGain, envAttackEnd);
         osc.gainNode.gain.setTargetAtTime(
           sustainVolume,
           envAttackEnd,
-          ((decayPercentage) + 0.001)
+          decayPercentage + 0.001
         );
         //End Amp envelope
 
         me.connectInputToOutput(osc.gainNode, output[0]);
 
-        me.start(osc, time, noteLengthInSeconds, frequency)
+        me.start(osc, time, noteLengthInSeconds, frequency);
 
         let voice = Voice.createVoice(osc, osc.gainNode);
         voice.attack = attackTime;
@@ -104,9 +113,7 @@ const Source = (audioContext) => {
         voice.decay = ampEnvelope.decay;
         voice.release = release;
 
-
         voices.push(voice);
-
       });
 
       return voices;
@@ -123,11 +130,10 @@ const Source = (audioContext) => {
       }
 
       return vco;
-
     }
-  }
+  };
 
   return me;
-}
+};
 
-export { Source }
+export { Source };

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Piano } from 'react-piano';
-import 'react-piano/dist/styles.css';
-import NoteGrid from './NoteGrid';
-import PropTypes from 'prop-types';
-import { instrumentsChanged } from './ShouldUpdate';
+import React from "react";
+import { Piano } from "react-piano";
+import "react-piano/dist/styles.css";
+import NoteGrid from "./NoteGrid";
+import PropTypes from "prop-types";
+import { instrumentsChanged } from "./ShouldUpdate";
 import styled from "styled-components";
 import Timeline from "./controls/Timeline";
 
@@ -31,7 +31,6 @@ const NoteGridBox = styled.div`
   height: 700px;
   overflow: hidden;
 `;
-
 
 class SequencedKeyboard extends React.Component {
   static propTypes = {
@@ -72,16 +71,17 @@ class SequencedKeyboard extends React.Component {
   getButtonText() {}
 
   getView() {
+    const { pianoSettings, noteGridSettings, isArmed, activeView } = this.props;
     const {
-      pianoSettings,
-      noteGridSettings,
-      isArmed,
-      activeView
-    } = this.props;
-    const { gridWidthPixels, gridHeightPixels, ticksPerBeat, pianoKeys, instrumentType } = noteGridSettings;
+      gridWidthPixels,
+      gridHeightPixels,
+      ticksPerBeat,
+      pianoKeys,
+      instrumentType
+    } = noteGridSettings;
     const { playNote, stopNote } = pianoSettings;
 
-    if (activeView === 'grid') {
+    if (activeView === "grid") {
       return null;
     } else {
       return (
@@ -104,7 +104,6 @@ class SequencedKeyboard extends React.Component {
     this.props.deleteSelectedNotesState(selectedNotes);
   }
   getNoteGrid() {
-
     const {
       noteGridSettings,
       setSelectedNotesState,
@@ -114,14 +113,19 @@ class SequencedKeyboard extends React.Component {
       changeGridSequence
     } = this.props;
 
-    if (activeView !== 'grid') return null;
+    if (activeView !== "grid") return null;
     else {
-
-      const {gridWidthPixels, ticksPerBeat, pianoKeys, instrumentType, gridHeightPixels} = noteGridSettings;
+      const {
+        gridWidthPixels,
+        ticksPerBeat,
+        pianoKeys,
+        instrumentType,
+        gridHeightPixels
+      } = noteGridSettings;
 
       return (
         <NoteGridBox>
-          <Timeline noBeats={instrument.beatsPerLoop}></Timeline>
+          <Timeline noBeats={instrument.beatsPerLoop} />
           <NoteGrid
             selectedNotes={instrument.selected_notes}
             setSelectedNotes={setSelectedNotesState}
@@ -137,6 +141,7 @@ class SequencedKeyboard extends React.Component {
             deleteSelectedNotes={this.deleteSelectedNotes}
             audioContext={this.props.audioContext}
             changeGridSequence={changeGridSequence}
+            firstRender={this.props.firstRender}
           />
         </NoteGridBox>
       );

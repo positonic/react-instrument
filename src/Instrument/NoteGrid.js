@@ -75,7 +75,7 @@ class NoteGrid extends React.Component {
     this.canvas = React.createRef();
     this.noteGridScroller = React.createRef();
     this.xpos = 0;
-    this.loopBeat = 1;
+
     this.drawPlayingStylus = this.drawPlayingStylus.bind(this);
     this.calculateXPos = this.calculateXPos.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
@@ -152,21 +152,23 @@ class NoteGrid extends React.Component {
     window.fluent.emitter.on("togglePlay", this.togglePlay);
     document.addEventListener("keydown", this.onKeyDown);
 
-    setTimeout(() => {
-      const highestNoteMidiNumber = Math.max.apply(
-        Math,
-        this.props.instrumentNotes.map(function(o) {
-          return o.midiNumber;
-        })
-      );
+    if (this.props.firstRender) {
+      setTimeout(() => {
+        const highestNoteMidiNumber = Math.max.apply(
+          Math,
+          this.props.instrumentNotes.map(function(o) {
+            return o.midiNumber;
+          })
+        );
 
-      const highestPianoMidiNumber = 127;
-      const differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
-      const keyHeight = 20;
-      const noKeysToPadTop = 10;
-      this.noteGridScroller.current.scrollTop =
-        (differenceToTop - noKeysToPadTop) * keyHeight;
-    }, 500);
+        const highestPianoMidiNumber = 127;
+        const differenceToTop = highestPianoMidiNumber - highestNoteMidiNumber;
+        const keyHeight = 20;
+        const noKeysToPadTop = 10;
+        this.noteGridScroller.current.scrollTop =
+          (differenceToTop - noKeysToPadTop) * keyHeight;
+      }, 500);
+    }
   }
 
   togglePlay(playObj) {
@@ -277,7 +279,7 @@ class NoteGrid extends React.Component {
     const gridWidth = this.calculateWidth(beatsPerLoop);
 
     return (
-      <div className={this.props.className}>
+      <div className={this.props.className} ref={this.noteGridScroller}>
         <Child>
           <canvas
             onMouseDown={this.onMouseDown}

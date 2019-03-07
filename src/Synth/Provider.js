@@ -1,10 +1,10 @@
 // See https://github.com/danigb/soundfont-player
 // for more documentation on prop options.
-import React from 'react';
-import PropTypes from 'prop-types';
-import { synthPlayer } from './players/synth';
-import { outputChannel } from '../InstrumentOutput';
-import { Source } from '../AudioUtils/Oscillator';
+import React from "react";
+import PropTypes from "prop-types";
+import { synthPlayer } from "./players/synth";
+import { outputChannel } from "../InstrumentOutput";
+import { Source } from "../AudioUtils/Oscillator";
 
 class SynthProvider extends React.Component {
   static propTypes = {
@@ -15,22 +15,28 @@ class SynthProvider extends React.Component {
   };
 
   static defaultProps = {
-    currentInstrument: 'defaultCurrentInstrument!'
+    currentInstrument: "defaultCurrentInstrument!"
   };
 
   constructor(props) {
     super(props);
-    const { audioContext, synthConfig, filters,instrumentId } = this.props;
+    const { audioContext, synthConfig, filters, instrumentId } = this.props;
 
     this.gainNode = this.props.gainNode;
 
-    this.synthOutputChannel = outputChannel(audioContext, (filters ? filters : []), this.gainNode);
+    this.synthOutputChannel = outputChannel(
+      audioContext,
+      filters ? filters : [],
+      this.gainNode
+    );
 
     this.filterNodes = this.synthOutputChannel.filterNodes;
     this.sourceNode = Source(audioContext);
 
     this.play = synthPlayer(audioContext, synthConfig);
-    this.oscillators = this.sourceNode.setupOscillators(synthConfig.oscillators);
+    this.oscillators = this.sourceNode.setupOscillators(
+      synthConfig.oscillators
+    );
 
     this.state = {
       playingVoices: {
@@ -47,18 +53,30 @@ class SynthProvider extends React.Component {
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     if (nextProps.filters !== this.props.filters) {
       const filterFieldsToUpdate = [
-        { field: 'frequency', value: nextProps.filters[0].props.value },
-        { field: 'Q', value: nextProps.filters[0].props.Q }
+        { field: "frequency", value: nextProps.filters[0].props.value },
+        { field: "Q", value: nextProps.filters[0].props.Q }
       ];
-      this.filterNodes = this.synthOutputChannel.updateValue(0, filterFieldsToUpdate);
+      this.filterNodes = this.synthOutputChannel.updateValue(
+        0,
+        filterFieldsToUpdate
+      );
     } else if (nextProps.synthConfig !== this.props.synthConfig) {
       this.oscillators.forEach((osc, index) => {
-        osc = this.sourceNode.applyTuning(osc, nextProps.synthConfig.oscillators[index].tuning);
-        osc.frequency.value = (osc.frequencyWithoutPipeLength) ? this.sourceNode.applyPipeLength(osc.frequencyWithoutPipeLength, nextProps.synthConfig.oscillators[index].pipeLength) : 0;
+        osc = this.sourceNode.applyTuning(
+          osc,
+          nextProps.synthConfig.oscillators[index].tuning
+        );
+        osc.frequency.value = osc.frequencyWithoutPipeLength
+          ? this.sourceNode.applyPipeLength(
+              osc.frequencyWithoutPipeLength,
+              nextProps.synthConfig.oscillators[index].pipeLength
+            )
+          : 0;
         osc.type = nextProps.synthConfig.oscillators[index].type;
-        osc.gain = nextProps.synthConfig.oscillators[index].gain;
-        osc.gainNode.gain.value = nextProps.synthConfig.oscillators[index].gain / 100;
-      })
+        osc.gain = nextProps.synthConfig.oscillators[index].gain / 100;
+        osc.gainNode.gain.value =
+          nextProps.synthConfig.oscillators[index].gain / 100;
+      });
     }
     return true;
   }
@@ -69,9 +87,10 @@ class SynthProvider extends React.Component {
   }
 
   playNoteAtTime = (midiNumber, time, noteLengthInSeconds) => {
-
     const { currentInstrument, bpm, synthConfig } = this.props;
-    this.oscillators = this.sourceNode.setupOscillators(synthConfig.oscillators);
+    this.oscillators = this.sourceNode.setupOscillators(
+      synthConfig.oscillators
+    );
 
     this.play(
       midiNumber,
@@ -85,9 +104,10 @@ class SynthProvider extends React.Component {
   };
 
   playNote = midiNumber => {
-
     const { currentInstrument, synthConfig } = this.props;
-    this.oscillators = this.sourceNode.setupOscillators(synthConfig.oscillators);
+    this.oscillators = this.sourceNode.setupOscillators(
+      synthConfig.oscillators
+    );
 
     this.playingVoices = this.play(
       midiNumber,
@@ -101,22 +121,17 @@ class SynthProvider extends React.Component {
   };
 
   stopNote = midiNumber => {
-    console.log('stopppp', midiNumber, this.playingVoices, this.playingVoices[midiNumber]);
-
     this.playingVoices[midiNumber].forEach(voice => {
       if (voice.vca) {
-        console.log('soft stop voice.release', voice.release);
-
         voice.vca.gain.linearRampToValueAtTime(0, voice.release);
         voice.source.gainNode.gain.linearRampToValueAtTime(0, voice.release);
-        console.log('this.filterNodes', this.filterNodes);
 
         setTimeout(() => {
           voice.source.stop();
           //voice.vca.gain.value = this.props.gain;
         }, voice.release);
       } else {
-        console.log('hard stop key up');
+        console.log("hard stop key up");
         voice.source.stop();
       }
     });
@@ -125,7 +140,7 @@ class SynthProvider extends React.Component {
   stopNoteAtTime = (midiNumber, time) => {
     this.playingVoices[midiNumber].forEach(voice => {
       if (voice.vca) {
-        console.log('soft stop voice.release', voice.release);
+        console.log("soft stop voice.release", voice.release);
         voice.vca.gain.linearRampToValueAtTime(0, voice.release);
 
         setTimeout(() => {
@@ -133,7 +148,7 @@ class SynthProvider extends React.Component {
           //voice.vca.gain.value = this.gainNode.gain.value;
         }, voice.release);
       } else {
-        console.log('hard stop key up');
+        console.log("hard stop key up");
         voice.source.stop();
       }
     });
@@ -145,14 +160,12 @@ class SynthProvider extends React.Component {
       if (this.playingVoices.hasOwnProperty(note)) {
         this.playingVoices[note].forEach(voice => {
           if (voice.vca) {
-            console.log('soft stop voice.release', voice.release);
             voice.vca.gain.linearRampToValueAtTime(0, voice.release);
             setTimeout(() => {
               voice.source.stop();
               //voice.vca.gain.value = this.props.gain;
             }, voice.release);
           } else {
-            console.log('hard stop key up');
             voice.source.stop();
           }
         });
