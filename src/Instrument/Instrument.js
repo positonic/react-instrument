@@ -577,7 +577,7 @@ export function withSequencedKeyboard(
                       )}
 
                       <SequencedKeyboard
-                        isSaved={this.props.isSaved}
+                        isSaved={instrument.isSaved}
                         audioContext={this.props.audioContext}
                         setSelectedNotesState={this.setSelectedNotes}
                         playNote={playNote}

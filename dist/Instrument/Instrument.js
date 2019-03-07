@@ -928,7 +928,7 @@ function withSequencedKeyboard(
                             currentInstrument
                           ),
                           _react.default.createElement(SequencedKeyboard, {
-                            isSaved: _this5.props.isSaved,
+                            isSaved: instrument.isSaved,
                             audioContext: _this5.props.audioContext,
                             setSelectedNotesState: _this5.setSelectedNotes,
                             playNote: playNote,
