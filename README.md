@@ -2,6 +2,8 @@
 
 [You can see it used by the instrument](https://fluentsynth.com).
 
+![react instrument](http://jamespfarrell.com/images/projects/react-instrument.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
