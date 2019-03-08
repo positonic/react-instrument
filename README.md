@@ -1,10 +1,6 @@
-# Fluent music framework
+# Fluent Instrument - A react based sequencer UI and keyboard
 
-The fluent music framework is a set of building blocks you can use to build your own instruments using the Javascript and the web audio api. 
-
-The aim of the framework is to make is to allow developers to focus on the fun stuff and not have to re-invent the wheel when it come to things like UI, sequencing, envelops and filters.
-
-You can see a [live demo here](https://fluentsynth.com).
+[You can see it used by the instrument](https://fluentsynth.com).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
