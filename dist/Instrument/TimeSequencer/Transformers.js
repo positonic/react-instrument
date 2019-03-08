@@ -10,7 +10,9 @@ var _PianoKeys = require("../Instrument/utils/PianoKeys");
 
 var _Errors = _interopRequireDefault(require("../../Errors/Errors"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 /**
  * This takes in all Instrument and returns the following json format which is playable by TimeSequencer:
@@ -51,11 +53,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  */
 function instrumentsToPlay(instruments) {
-  var instrumentsToPlay = instruments.filter(function (o) {
+  var instrumentsToPlay = instruments.filter(function(o) {
     return o.isSolo === true;
   });
-  if (instrumentsToPlay.length > 0) return instrumentsToPlay;else {
-    return instruments.filter(function (o) {
+  if (instrumentsToPlay.length > 0) return instrumentsToPlay;
+  else {
+    return instruments.filter(function(o) {
       return o.isMuted !== true;
     });
   }
@@ -64,28 +67,34 @@ function instrumentsToPlay(instruments) {
 function convertToPlay(trackInstruments, mainOutput, audioContext) {
   var sequences = [];
   trackInstruments = instrumentsToPlay(trackInstruments);
-  trackInstruments.forEach(function (instrument) {
-    if (instrument.type === 'sequencedSynth' || instrument.type === 'midiFont') {
+  trackInstruments.forEach(function(instrument) {
+    if (
+      instrument.type === "sequencedSynth" ||
+      instrument.type === "midiFont"
+    ) {
       instrument = convertNotesToSequences(instrument);
     }
 
-    if (typeof instrument.sequences !== 'undefined' && instrument.sequences.length) {
+    if (
+      typeof instrument.sequences !== "undefined" &&
+      instrument.sequences.length
+    ) {
       try {
-        instrument.sequences.forEach(function (noteSequence) {
+        instrument.sequences.forEach(function(noteSequence) {
           var sequence = [];
 
           if (noteSequence && noteSequence.length) {
-            noteSequence.forEach(function (sequenceNotes) {
-              if (typeof instrument.Play === 'function') {
+            noteSequence.forEach(function(sequenceNotes) {
+              if (typeof instrument.Play === "function") {
                 var newSequenceNotes = Object.assign(sequenceNotes, {
                   playSequence: instrument.Play(audioContext, mainOutput)
                 });
                 sequence.push(newSequenceNotes);
-              } else if (instrument.type === 'midiFont') {
+              } else if (instrument.type === "midiFont") {
                 var _newSequenceNotes = Object.assign(sequenceNotes, {
                   type: instrument.type,
                   instrumentName: instrument.instrumentName,
-                  playerName: instrument.type + '-' + instrument.instrumentName
+                  playerName: instrument.type + "-" + instrument.instrumentName
                 });
 
                 sequence.push(_newSequenceNotes);
@@ -99,13 +108,9 @@ function convertToPlay(trackInstruments, mainOutput, audioContext) {
         });
         /**/
       } catch (error) {
-        console.log(error);
-        debugger;
+        console.log("Error: " + error);
       }
-    } else {
-      console.log('Why No sequences for ', instrument);
     } //notes.push(newSequences);
-
   });
   return sequences;
 }
@@ -113,12 +118,15 @@ function convertToPlay(trackInstruments, mainOutput, audioContext) {
 function convertNotesToSequences(instrument) {
   if (!instrument) throw _Errors.default.instrumentHasNoDefaultConfig();
   var validBeatLengths = [4, 8, 16, 32, 64, 128];
-  var maxBeat = Math.max.apply(Math, instrument.notes.map(function (o) {
-    return o.beat_time;
-  }));
+  var maxBeat = Math.max.apply(
+    Math,
+    instrument.notes.map(function(o) {
+      return o.beat_time;
+    })
+  );
   var noBeats = 0;
   var ticksPerBeat = 4;
-  validBeatLengths.forEach(function (beatLength) {
+  validBeatLengths.forEach(function(beatLength) {
     if (!noBeats && beatLength >= maxBeat) noBeats = beatLength;
   });
   var noTicks = noBeats * ticksPerBeat;
@@ -133,13 +141,13 @@ function convertNotesToSequences(instrument) {
   if (instrument.notes) {
     var sequences = [];
 
-    _PianoKeys.PianoKeys.forEach(function (key) {
+    _PianoKeys.PianoKeys.forEach(function(key) {
       var sequence = [];
 
       var _loop = function _loop(i) {
         var beatNumber = i / 4 + 1; //console.log('beatNumber is ', beatNumber);
 
-        var note = instrument.notes.find(function (o) {
+        var note = instrument.notes.find(function(o) {
           return o.beat_time === beatNumber && o.midiNumber === key.midiNumber;
         });
 
@@ -151,7 +159,6 @@ function convertNotesToSequences(instrument) {
         // i=1;beatTime=1.25
         // i=2;beatTime=1.5
         // i=3;beatTime=1.75
-
 
         instrument.sequences = sequences;
       };

@@ -271,7 +271,8 @@ var SequencedKeyboard =
             instrumentId = _this$props2.instrumentId,
             instrument = _this$props2.instrument,
             activeView = _this$props2.activeView,
-            changeGridSequence = _this$props2.changeGridSequence;
+            changeGridSequence = _this$props2.changeGridSequence,
+            changeSequencedNote = _this$props2.changeSequencedNote;
           if (activeView !== "grid") return null;
           else {
             var gridWidthPixels = noteGridSettings.gridWidthPixels,
@@ -300,6 +301,7 @@ var SequencedKeyboard =
                 deleteSelectedNotes: this.deleteSelectedNotes,
                 audioContext: this.props.audioContext,
                 changeGridSequence: changeGridSequence,
+                changeSequencedNote: changeSequencedNote,
                 isSaved: this.props.isSaved
               })
             );

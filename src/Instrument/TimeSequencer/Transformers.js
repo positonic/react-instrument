@@ -1,5 +1,5 @@
-import { PianoKeys } from '../Instrument/utils/PianoKeys';
-import Errors from '../../Errors/Errors';
+import { PianoKeys } from "../Instrument/utils/PianoKeys";
+import Errors from "../../Errors/Errors";
 /**
  * This takes in all Instrument and returns the following json format which is playable by TimeSequencer:
  *
@@ -53,46 +53,47 @@ export function convertToPlay(trackInstruments, mainOutput, audioContext) {
   trackInstruments = instrumentsToPlay(trackInstruments);
 
   trackInstruments.forEach(instrument => {
-    if (instrument.type === 'sequencedSynth' || instrument.type === 'midiFont') {
+    if (
+      instrument.type === "sequencedSynth" ||
+      instrument.type === "midiFont"
+    ) {
       instrument = convertNotesToSequences(instrument);
     }
 
-    if (typeof instrument.sequences !== 'undefined' && instrument.sequences.length) {
+    if (
+      typeof instrument.sequences !== "undefined" &&
+      instrument.sequences.length
+    ) {
       try {
-          instrument.sequences.forEach(noteSequence => {
-            let sequence = [];
+        instrument.sequences.forEach(noteSequence => {
+          let sequence = [];
 
-            if (noteSequence && noteSequence.length) {
-              noteSequence.forEach(sequenceNotes => {
-                if (typeof instrument.Play === 'function') {
-                  let newSequenceNotes = Object.assign(sequenceNotes, {
-                    playSequence: instrument.Play(audioContext, mainOutput)
-                  });
-                  sequence.push(newSequenceNotes);
-                } else if(instrument.type === 'midiFont') {
-                  let newSequenceNotes = Object.assign(sequenceNotes, {
-                    type: instrument.type,
-                    instrumentName: instrument.instrumentName,
-                    playerName: instrument.type+'-'+instrument.instrumentName
-                  });
-                  sequence.push(newSequenceNotes);
-                } else {
-                  throw Errors.instrumentHasNoPlayFunction();
-                }
+          if (noteSequence && noteSequence.length) {
+            noteSequence.forEach(sequenceNotes => {
+              if (typeof instrument.Play === "function") {
+                let newSequenceNotes = Object.assign(sequenceNotes, {
+                  playSequence: instrument.Play(audioContext, mainOutput)
+                });
+                sequence.push(newSequenceNotes);
+              } else if (instrument.type === "midiFont") {
+                let newSequenceNotes = Object.assign(sequenceNotes, {
+                  type: instrument.type,
+                  instrumentName: instrument.instrumentName,
+                  playerName: instrument.type + "-" + instrument.instrumentName
+                });
+                sequence.push(newSequenceNotes);
+              } else {
+                throw Errors.instrumentHasNoPlayFunction();
+              }
+            });
+          }
 
-
-              });
-            }
-
-            sequences.push(sequence);
-          });
+          sequences.push(sequence);
+        });
         /**/
       } catch (error) {
-        console.log(error);
-        debugger
+        console.log("Error: " + error);
       }
-    } else {
-      console.log('Why No sequences for ', instrument);
     }
 
     //notes.push(newSequences);
@@ -102,8 +103,7 @@ export function convertToPlay(trackInstruments, mainOutput, audioContext) {
 }
 
 export function convertNotesToSequences(instrument) {
-
-  if(!instrument) throw Errors.instrumentHasNoDefaultConfig();
+  if (!instrument) throw Errors.instrumentHasNoDefaultConfig();
 
   const validBeatLengths = [4, 8, 16, 32, 64, 128];
 

@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import React from 'react';
+import styled from "styled-components";
+import React from "react";
 /*
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 */
-import { Rnd } from 'react-rnd'; // The default
+import { Rnd } from "react-rnd"; // The default
 
 const NotesBlock = styled.div`
   position: absolute;
@@ -14,7 +14,7 @@ const NotesBlock = styled.div`
 `;
 const Note = styled.div`
   position: absolute;
-  border: ${props => (props.isSelected ? '1px solid white' : 'auto')}
+  border: ${props => (props.isSelected ? "1px solid white" : "auto")}
   width: ${props => props.noteWidth};
   height: 20px;
   left: ${props => props.left};
@@ -70,7 +70,7 @@ class Notes extends React.Component {
     //this.onClick = this.onClick.bind(this);
     this.state = {
       /*selectedNotes: [],
-      */
+       */
       mousePosition: null,
       xPos: 60,
       yPos: 100
@@ -94,24 +94,25 @@ class Notes extends React.Component {
     return (evt, direction, refToElement, delta, position) => {
       evt.preventDefault();
       const newNoteLength = duration + delta.width / 80;
-      this.props.changeSequencedNote(
-        this.trackId,
-        this.instrumentId,
-        index,
-        null,
-        newNoteLength,
-        null
-      );
+      this.props.changeSequencedNote(index, null, newNoteLength, null);
     };
   }
 
   drawNote(note, id, index) {
-    const { trackId, instrumentId, pianoKeys, gridWidthPixels, gridHeightPixels } = this.props;
+    const {
+      trackId,
+      instrumentId,
+      pianoKeys,
+      gridWidthPixels,
+      gridHeightPixels
+    } = this.props;
     const { selectedNotes, setSelectedNotes } = this.props;
 
     let xPos = (note.beat_time - 1) * 4 * gridWidthPixels;
 
-    const pianoKeyIndex = pianoKeys.findIndex(o => o.midiNumber === note.midiNumber);
+    const pianoKeyIndex = pianoKeys.findIndex(
+      o => o.midiNumber === note.midiNumber
+    );
     const yPos = pianoKeyIndex * gridHeightPixels;
 
     const noteWidth = note.duration * gridWidthPixels * 4;
@@ -119,7 +120,7 @@ class Notes extends React.Component {
 
     return (
       <Rnd
-        key={'id'+id}
+        key={"id" + id}
         enableResizing={{
           top: false,
           right: true,
@@ -143,7 +144,6 @@ class Notes extends React.Component {
           const newBeatNumber = data.lastX / (gridWidthPixels * 4) + 1;
           if (data.deltaX === 0 && data.deltaY === 0) {
             //this.props.setSelectedNotes(trackId, instrumentId, [index]);
-            debugger
             setSelectedNotes([index]);
 
             /*this.setState({
@@ -151,8 +151,6 @@ class Notes extends React.Component {
             })*/
           } else {
             this.props.changeSequencedNote(
-              trackId,
-              instrumentId,
               index,
               newMidiNumber,
               note.duration,
@@ -163,7 +161,12 @@ class Notes extends React.Component {
         }}
         dragGrid={[gridWidthPixels, gridHeightPixels]}
       >
-        <Note onClick={onClick} noteIndex={index} noteWidth={'100%'} isSelected={(selectedNotes.indexOf(index) > -1)}/>
+        <Note
+          onClick={onClick}
+          noteIndex={index}
+          noteWidth={"100%"}
+          isSelected={selectedNotes.indexOf(index) > -1}
+        />
       </Rnd>
     );
   }
@@ -172,10 +175,12 @@ class Notes extends React.Component {
     const { notes, noteGridWidth } = this.props;
     const drawNote = this.drawNote;
 
-    if(notes)
+    if (notes)
       return (
-        <NotesBlock blockWidth={noteGridWidth + 'px'}>
-          {notes.map((note, index) => drawNote(note, note.midiNumber + '-' + index, index))}
+        <NotesBlock blockWidth={noteGridWidth + "px"}>
+          {notes.map((note, index) =>
+            drawNote(note, note.midiNumber + "-" + index, index)
+          )}
         </NotesBlock>
       );
     else return null;

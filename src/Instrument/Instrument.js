@@ -15,7 +15,11 @@ import BeatsPerLoopSelector from "./controls/BeatsPerLoopSelector";
 import ToggleMoreSettings from "./controls/ToggleMoreSettings";
 import { SetMidiCallbacks } from "./controls/Midi";
 import AudioVisualiser from "./AudioVisualiser";
-import NoteGrid from "./SequencedKeyboard";
+import {
+  buildNewNotes,
+  buildChangedNotes,
+  deleteNotes
+} from "./InstrumentData";
 
 const SequencedKeyboardContainer = styled.div`
   float: left;
@@ -143,8 +147,10 @@ export function withSequencedKeyboard(
       this.updateEnvelopeState = this.updateEnvelopeState.bind(this);
       this.onTick = this.onTick.bind(this);
       this.setSelectedNotes = this.setSelectedNotes.bind(this);
+      this.deleteSelectedNotes = this.deleteSelectedNotes.bind(this);
       this.changeGridSequence = this.changeGridSequence.bind(this);
       this.toggleFilter = this.toggleFilter.bind(this);
+      this.changeSequencedNote = this.changeSequencedNote.bind(this);
 
       this.state = {
         showAnalyser: false,
@@ -220,8 +226,6 @@ export function withSequencedKeyboard(
 
     updateSynthOscState(oscId, property, value) {
       //this.props.updateSynthOscState(this.props.trackId, this.props.instrumentId, oscId, property, value);
-      console.log("updating state updateSynthOscState");
-
       this.setState(
         state => ({
           ...state,
@@ -236,10 +240,10 @@ export function withSequencedKeyboard(
               const newOsc = state.instrument.oscillators[oscId];
               newOsc[property] = value;
 
-              console.log("new newOsc Instrument state = ", {
+              /*console.log("new newOsc Instrument state = ", {
                 ...item,
                 ...newOsc
-              });
+              });*/
               return {
                 ...item,
                 ...newOsc
@@ -248,14 +252,14 @@ export function withSequencedKeyboard(
           }
         }),
         () => {
-          console.log("Newstate is ", this.state);
+          //console.log("Newstate is ", this.state);
         }
       );
     }
 
     updateEnvelopeState(envelopeId, property, value) {
       //this.props.updateSynthOscState(this.props.trackId, this.props.instrumentId, oscId, property, value);
-      console.log("updating state updateSynthOscState");
+      //console.log("updating state updateSynthOscState");
 
       this.setState(
         state => ({
@@ -271,10 +275,10 @@ export function withSequencedKeyboard(
               const newOsc = state.instrument.envelopes[envelopeId];
               newOsc[property] = value;
 
-              console.log("new newOsc Instrument state = ", {
+              /*console.log("new newOsc Instrument state = ", {
                 ...item,
                 ...newOsc
-              });
+              });*/
               return {
                 ...item,
                 ...newOsc
@@ -283,7 +287,7 @@ export function withSequencedKeyboard(
           }
         }),
         () => {
-          console.log("Newstate is ", this.state);
+          //console.log("Newstate is ", this.state);
         }
       );
     }
@@ -310,7 +314,7 @@ export function withSequencedKeyboard(
             if (property === "filter") newFilter.props.value = value;
             else if (property === "resonance") newFilter.props.Q = value;
             else console.log("Error unexpected propery", property);
-            console.log("newFilter.props is ", property, newFilter.props);
+            //console.log("newFilter.props is ", property, newFilter.props);
             // Otherwise, this is the one we want - return an updated value
 
             return {
@@ -364,7 +368,7 @@ export function withSequencedKeyboard(
       //this.props.toggleShowInstrumentSettings(this.props.trackId, this.props.instrumentId);
       const { showMoreSettings } = this.state.instrument;
       const state = this.state;
-      console.log(state, showMoreSettings, this.state.instrument);
+      //console.log(state, showMoreSettings, this.state.instrument);
 
       this.setState(state => ({
         ...state,
@@ -404,38 +408,78 @@ export function withSequencedKeyboard(
         ...state,
         instrument: {
           ...state.instrument,
-          selectedNotes
+          selected_notes: selectedNotes
         }
       }));
     }
 
     deleteSelectedNotes(notesToDelete) {
-      /*const notes = fromJS(this.state.Instrument.notes).update(notesIndex, arr => {
-        let newNotes;
-        notesToDelete.forEach(noteIndex => {
-          newNotes = arr.delete(noteIndex);
-        });
-        return newNotes;
-      });
+      const { instrument } = this.state;
+      let updateInstrument = JSON.parse(JSON.stringify(instrument));
 
-      this.setState(state => ({
-        ...state,
-        Instrument: {
-          ...state.Instrument,
-          notes: notes
-        }
-      }));*/
+      const updatedInstrumentNotesPhrase = deleteNotes(
+        updateInstrument.notes[updateInstrument.notesIndex],
+        notesToDelete
+      );
+
+      updateInstrument.notes[
+        updateInstrument.notesIndex
+      ] = updatedInstrumentNotesPhrase;
+
+      this.setState({
+        instrument: updateInstrument
+      });
+    }
+
+    changeSequencedNote(index, midiNumber, noteLengthBeats, beatNumber) {
+      const { instrument } = this.state;
+      let updateInstrument = JSON.parse(JSON.stringify(instrument));
+
+      const updatedInstrumentNotesPhrase = buildChangedNotes(
+        updateInstrument.notes[updateInstrument.notesIndex],
+        index,
+        midiNumber,
+        beatNumber,
+        noteLengthBeats
+      );
+
+      debugger;
+      updateInstrument.notes[
+        updateInstrument.notesIndex
+      ] = updatedInstrumentNotesPhrase;
+
+      this.setState({
+        instrument: updateInstrument
+      });
     }
 
     changeGridSequence(midiNumber, instrumentId, noteLengthBeats, beatNumber) {
       const { instrument } = this.state;
-      this.props.changeGridSequence(
+
+      let updateInstrument = JSON.parse(JSON.stringify(instrument));
+
+      const updatedInstrumentNotesPhrase = buildNewNotes(
+        updateInstrument.notes[updateInstrument.notesIndex],
+        midiNumber,
+        beatNumber,
+        noteLengthBeats
+      );
+
+      updateInstrument.notes[
+        updateInstrument.notesIndex
+      ] = updatedInstrumentNotesPhrase;
+
+      this.setState({
+        instrument: updateInstrument
+      });
+      /* Only do this on save?
+        this.props.changeGridSequence(
         midiNumber,
         instrumentId,
         instrument,
         noteLengthBeats,
         beatNumber
-      );
+      );*/
     }
 
     toggleFilter(instrumentId, filterIndex) {
@@ -577,6 +621,7 @@ export function withSequencedKeyboard(
                       )}
 
                       <SequencedKeyboard
+                        instrument={instrument}
                         isSaved={instrument.isSaved}
                         audioContext={this.props.audioContext}
                         setSelectedNotesState={this.setSelectedNotes}
@@ -585,7 +630,6 @@ export function withSequencedKeyboard(
                         pianoSettings={pianoSettings}
                         noteGridSettings={this.noteGridSettings}
                         activeView={instrument.view}
-                        instrument={instrument}
                         isArmed={isArmed}
                         deleteSelectedNotesState={this.deleteSelectedNotes}
                         changeSequencedKeyboardView={
@@ -595,6 +639,7 @@ export function withSequencedKeyboard(
                         toggleShowEffects={this.props.toggleShowEffects}
                         instrumentId={instrumentId}
                         changeGridSequence={this.changeGridSequence}
+                        changeSequencedNote={this.changeSequencedNote}
                         render={({
                           changeView,
                           changeNumberOfBeatsLoop,

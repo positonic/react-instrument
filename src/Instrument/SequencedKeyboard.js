@@ -110,7 +110,8 @@ class SequencedKeyboard extends React.Component {
       instrumentId,
       instrument,
       activeView,
-      changeGridSequence
+      changeGridSequence,
+      changeSequencedNote
     } = this.props;
 
     if (activeView !== "grid") return null;
@@ -141,6 +142,7 @@ class SequencedKeyboard extends React.Component {
             deleteSelectedNotes={this.deleteSelectedNotes}
             audioContext={this.props.audioContext}
             changeGridSequence={changeGridSequence}
+            changeSequencedNote={changeSequencedNote}
             isSaved={this.props.isSaved}
           />
         </NoteGridBox>

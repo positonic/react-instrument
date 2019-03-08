@@ -1,6 +1,6 @@
 /*
-* virtual-dom hook for drawing to the canvas element.
-*/
+ * virtual-dom hook for drawing to the canvas element.
+ */
 class CanvasHook {
   constructor(peaks, offset, bits, color) {
     this.peaks = peaks;
@@ -8,7 +8,6 @@ class CanvasHook {
     this.offset = offset;
     this.color = color;
     this.bits = bits;
-
   }
 
   static drawFrame(cc, h2, x, minPeak, maxPeak) {
@@ -22,15 +21,13 @@ class CanvasHook {
   }
 
   hook(canvas, prop, prev) {
-
     // canvas is up to date
-    if (prev !== undefined &&
-      (prev.peaks === this.peaks)) {
+    if (prev !== undefined && prev.peaks === this.peaks) {
       return;
     }
 
     const len = canvas.width;
-    const cc = canvas.getContext('2d');
+    const cc = canvas.getContext("2d");
     const h2 = canvas.height / 2;
     const maxValue = 2 ** (this.bits - 1);
 
@@ -38,10 +35,14 @@ class CanvasHook {
     cc.fillStyle = this.color;
 
     for (let i = 0; i < len; i += 1) {
-      const minPeak = this.peaks[(i + this.offset) * 2] ? (this.peaks[(i + this.offset) * 2] / maxValue) : 0;
-      const maxPeak = this.peaks[(i + this.offset) * 2] ? (this.peaks[((i + this.offset) * 2) + 1] / maxValue) : 0;
+      const minPeak = this.peaks[(i + this.offset) * 2]
+        ? this.peaks[(i + this.offset) * 2] / maxValue
+        : 0;
+      const maxPeak = this.peaks[(i + this.offset) * 2]
+        ? this.peaks[(i + this.offset) * 2 + 1] / maxValue
+        : 0;
 
-      console.log('Draw canvas ', i, this.peaks[i], this.offset, maxValue, minPeak, maxPeak);
+      //console.log('Draw canvas ', i, this.peaks[i], this.offset, maxValue, minPeak, maxPeak);
 
       CanvasHook.drawFrame(cc, h2, i, minPeak, maxPeak);
     }
