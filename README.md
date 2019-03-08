@@ -1,8 +1,62 @@
-# Fluent Instrument - A react based sequencer UI and keyboard
+# Fluent React Instrument - A react based sequencer UI and keyboard
 
-[You can see it used by the instrument](https://fluentsynth.com).
+If you want to have fun builing an instrument with the web audio api, this component gives you all of the UI that you will need.
+
+You can create your own custom <Provider> which will take care of making the sounds, and pass it into the Fluent react-instrument, which will give you:
+
+- a sequencer interface
 
 ![react instrument](http://jamespfarrell.com/images/projects/react-instrument.png)
+
+- a midi enabled keyboard
+
+![react instrument](http://jamespfarrell.com/images/projects/fluent-keyboard.png)
+
+For a live demo, check out the instruments on the [Fluent Synth](https://fluentsynth.com).
+
+To use run:
+
+`npm install react-instrument`
+
+Then configure the keyboard like so:
+
+```javascript
+import SequencedInstrument from 'react-instrument';
+
+const instrumentConfig = {
+  provider: SynthProvider,
+  parameters: SynthParameters,
+  audioContext: this.props.audioContext,
+  mainOutput: this.props.mainOutput,
+  timeSequencer: this.props.timeSequencer,
+  instrument: instrument,
+  instrumentId: instrumentIndex,
+  instrumentNames: [],
+  currentInstrument: instrument.currentInstrument,
+  samplesBuffers: this.props.tracks.samplesBuffers,
+  gainNode: this.props.instrumentGainNodes[instrumentIndex],
+  isArmed: this.props.tracks.armedInstrument === instrumentIndex,
+  showInstrument:
+    this.props.tracks.showAllInstruments || this.props.tracks.armedInstrument === instrumentIndex,
+  bpm: this.props.bpm,
+
+  changeGridSequence: this.changeGridSequence,
+  changeSequencedKeyboardInstrument: this.changeSequencedKeyboardInstrument,
+  deleteInstrument: this.deleteInstrument,
+  setArmedInstrument: this.setArmedInstrument,
+  setInstrumentGain: this.setInstrumentGain,
+  changeSequencedKeyboardView: this.changeSequencedKeyboardView,
+  changeBeatsPerLoop: this.changeBeatsPerLoop,
+  toggleShowEffects: this.toggleShowEffects
+};
+
+<SequencedInstrument config={instrumentConfig} />;
+```
+
+See the demo project for 2 example Providers (full instruments)
+
+- One synthesizer
+- One sampler
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
