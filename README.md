@@ -1,5 +1,7 @@
 # Fluent React Instrument - A react based sequencer UI and keyboard
 
+For a live demo, check out the instruments on the [Fluent Synth](https://fluentsynth.com).
+
 If you want to have fun builing an instrument with the web audio api, this component gives you all of the UI that you will need.
 
 You can create your own custom <Provider> which will take care of making the sounds, and pass it into the Fluent react-instrument, which will give you:
@@ -11,8 +13,6 @@ You can create your own custom <Provider> which will take care of making the sou
 - a midi enabled keyboard
 
 ![react instrument](http://jamespfarrell.com/images/projects/fluent-keyboard.png)
-
-For a live demo, check out the instruments on the [Fluent Synth](https://fluentsynth.com).
 
 To use run:
 
